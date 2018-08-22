@@ -25,18 +25,9 @@ services:
     depends_on:
       - postgresql_server
 
-  rabbitmq_server:
-    container_name: poc_rabbitmq_server
-    image: rabbitmq:3.7.7
-    restart: always
-    volumes:
-      - poc_volume_rabbitmq:/var/lib/rabbitmq
-    networks:
-      - poc_network
-
-  rabbitmq_management:
-    container_name: poc_rabbitmq_management
-    image: rabbitmq:3-management
+  rabbitmq:
+    container_name: poc_rabbitmq
+    image: rabbitmq:3.7.7-management
     restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=poc_rmq_user
@@ -45,8 +36,6 @@ services:
       - 7072:15672
     networks:
       - poc_network
-    depends_on:
-      - rabbitmq_server
 
   redis_server:
     container_name: poc_redis_server
@@ -60,7 +49,6 @@ services:
 
   redis_commander:
     container_name: poc_redis_commander
-    hostname: redis-commander
     image: rediscommander/redis-commander:latest
     restart: always
     environment:
@@ -71,6 +59,21 @@ services:
       - poc_network
     depends_on:
       - redis_server
+
+  sandbox:
+    container_name: poc_sandbox
+    restart: always
+    tty: true
+    build:
+      context: ./sandbox
+      dockerfile: Dockerfile
+    working_dir: /sandbox
+    volumes:
+      - ./sandbox:/sandbox
+    environment:
+      - MESSAGE_QUEUE=amqp://poc_rmq_user:poc_rmq_pass@rabbitmq
+    networks:
+      - poc_network
 
 volumes:
   poc_volume_postgresql:
