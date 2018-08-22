@@ -38,9 +38,13 @@ To enter in sandbox;
 
 And when you in, simply run scripts as you want;
     
-    $ node rabbitmq-tutorial/hello-world/send.js
+    $ node rabbitmq/tutorial/hello-world/send.js
 
-For example start two bash screen and send from one and receive from other.
+Dont stop now and go run the receiver also;
+
+    $ node rabbitmq/tutorial/hello-world/receive.js
+
+You can run multiple receiver to observe things.
 
 # TODO
 - Use RabbitMQ with rabbitmq-delayed-message-exchange [plugin](https://hub.docker.com/r/tetsuobe/rabbitmq-delayed-message-exchange/~/dockerfile/).
