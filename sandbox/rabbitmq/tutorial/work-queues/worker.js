@@ -6,6 +6,10 @@ amqp.connect(process.env.MESSAGE_QUEUE, function(err, conn) {
   }
 
   conn.createChannel(function(err, ch) {
+    if (err) {
+      return console.log(err);
+    }
+
     var q = 'task_queue';
 
     ch.assertQueue(q, {

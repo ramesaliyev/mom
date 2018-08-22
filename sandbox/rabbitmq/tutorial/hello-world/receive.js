@@ -1,7 +1,15 @@
 var amqp = require('amqplib/callback_api');
 
 amqp.connect(process.env.MESSAGE_QUEUE, function(err, conn) {
+  if (err) {
+    return console.log(err);
+  }
+
   conn.createChannel(function(err, ch) {
+    if (err) {
+      return console.log(err);
+    }
+    
     var q = 'hello';
 
     ch.assertQueue(q, {

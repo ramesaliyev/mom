@@ -24,8 +24,14 @@ This is a demonstration of how to create an intelligent and scalable service clu
 
 # Tutorials for Better Understanding 
   - RabbitMQ
-    - [Official JS Tutorial](https://www.rabbitmq.com/tutorials/tutorial-one-javascript.html)
-    - [Official Github Repo of Tutorial](https://github.com/rabbitmq/rabbitmq-tutorials/tree/master/javascript-nodejs)
+    - Official
+      - [JS Tutorial](https://www.rabbitmq.com/tutorials/tutorial-one-javascript.html)
+      - [Github Repo of Tutorial](https://github.com/rabbitmq/rabbitmq-tutorials/tree/master/javascript-nodejs)
+      - [AMQP Concepts](https://www.rabbitmq.com/tutorials/amqp-concepts.html)
+      - [Documentation](https://www.rabbitmq.com/documentation.html)
+      - [Queues](https://www.rabbitmq.com/queues.html)
+    - Other
+      - [RabbitMQ For Beginners](https://www.cloudamqp.com/blog/2015-05-18-part1-rabbitmq-for-beginners-what-is-rabbitmq.html)
   - TypeScript
     - [In 5 Minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
     - [Handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html)
