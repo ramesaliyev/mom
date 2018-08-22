@@ -31,6 +31,9 @@ amqp.connect(process.env.MESSAGE_QUEUE, function(err, conn) {
       // exchange and a queue is called a binding.
       ch.bindQueue(q.queue, ex, '');
       // From now on the logs exchange will append messages to our queue.
+      // Last empty string is binding key and meaning of a binding key
+      // depends on the exchange type. The fanout exchanges, which we
+      // are using here, simply ignored its value.
 
       // so we can consume now
       ch.consume(q.queue, consumer, { noAck: true });

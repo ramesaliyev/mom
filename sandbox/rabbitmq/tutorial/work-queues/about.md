@@ -6,4 +6,9 @@ work queues with more advanced fair-dispatch mode.
     durable & persist: true
     prefetch: 1
 
+    $ node rabbitmq/tutorial/work-queues/new-task.js .......j1
+    $ node rabbitmq/tutorial/work-queues/new-task.js .......j2
+    
+    every dot makes job duration one second longer
+        
 callbacks used

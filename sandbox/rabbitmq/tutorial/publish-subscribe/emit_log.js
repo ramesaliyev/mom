@@ -27,10 +27,10 @@ amqp.connect(process.env.MESSAGE_QUEUE, function(err, conn) {
     // but that's okay for us; if no consumer is listening yet we can safely discard the message.
 
     console.log(" [x] Sent %s", msg);
-  });
 
-  setTimeout(function() {
-    conn.close();
-    process.exit(0);
-  }, 50);
+    setTimeout(function() {
+      conn.close();
+      process.exit(0);
+    }, 50);
+  });
 });
