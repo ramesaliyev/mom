@@ -35,7 +35,7 @@ class MiniDrawer extends Component {
   };
 
   render() {
-    const { classes, theme, children } = this.props;
+    const { classes, children } = this.props;
     const { isDrawerOpen } = this.state;
     
     const AppBarClasses = classNames(classes.appBar, {

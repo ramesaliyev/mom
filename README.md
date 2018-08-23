@@ -11,16 +11,29 @@ To install and run application you only need to have installed and running [dock
     git clone git@github.com:ramesaliyev/mom-based-architecture-poc.git
 #### Start Everything
     docker-compose up
-#### After that you can;
+**Starting everything will take some time**, so be patient. When everything has started you can;
   - Navigate to admin panel at [localhost:7070](http://localhost:7070/)
   - Other other [management screens](#management-screens)
+
+# Debugging
+## Frontend
+For front-end debugging start containers without panel
+    
+    docker-compose up postgresql_server postgresql_adminer rabbitmq redis_server redis_commander sandbox
+    
+Then start panel locally.
+
+    npm i
+    npm start
+  
+Then [see here](/frontend/panel/README.md) to debugging options.
 
 # Structure
 ## Backend
 Our main MOM based architecture what is this POC about.
 
 ## Frontend
-All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [reach-router](https://reach.tech/router), [redux](https://redux.js.org/) and [material-ui](https://material-ui.com/).
+All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [reach-router](https://reach.tech/router), [redux](https://redux.js.org/) and [material-ui](https://material-ui.com/). Since this is a POC front-end code running in development mode by default. So your changes will effect immediately. 
 
 ### Panel
 Right now we have only one front-end app which is our admin panel. 
@@ -33,6 +46,9 @@ A fake api for us to fetch data from. To imitate a real world scenarios external
 - take long time to respond
 - respond with errors
 - occurs timeouts
+
+## Scripts
+Some bash scripts to use when needed.
 
 # Technologies
 - Backend
@@ -70,6 +86,8 @@ A fake api for us to fetch data from. To imitate a real world scenarios external
 - Redis: [localhost:7073](http://localhost:7073/)
 
 # Resources for Better Understanding 
+  - Docker
+    - [Building Efficient Dockerfiles - Node.js](http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/)
   - MOM
     - [Wikipedia](https://www.wikiwand.com/en/Message-oriented_middleware)
   - RabbitMQ
