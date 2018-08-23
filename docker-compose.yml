@@ -76,6 +76,23 @@ services:
     networks:
       - poc_network
 
+  panel:
+    container_name: poc_panel
+    restart: always
+    build:
+      context: ./frontend/panel
+      dockerfile: Dockerfile
+    working_dir: /frontend/panel
+    volumes:
+      - ./frontend/panel:/frontend/panel
+    environment:
+      - PORT=7070
+      - NODE_ENV=${NODE_ENV}
+    ports:
+      - 7070:7070
+    networks:
+      - poc_network
+
 volumes:
   poc_volume_postgresql:
   poc_volume_rabbitmq:
