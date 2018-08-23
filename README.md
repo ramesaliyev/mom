@@ -8,9 +8,9 @@ On the tip of the [iceberg](https://www.wikiwand.com/en/Iceberg) we're only seei
 # Installation & Running
 To install and run application you only need to have installed and running [docker](https://www.docker.com/products).
 #### Cloning Repo
-    $ git clone git@github.com:ramesaliyev/mom-based-architecture-poc.git
+    git clone git@github.com:ramesaliyev/mom-based-architecture-poc.git
 #### Start Everything
-    $ docker-compose up
+    docker-compose up
 #### After that you can;
   - Navigate to admin panel at [localhost:7070](http://localhost:7070/)
   - Other other [management screens](#management-screens)
@@ -95,15 +95,15 @@ A fake api for us to fetch data from. To imitate a real world scenarios external
 # Using Sandbox
 There is a sandbox to ease making experiments with things. It consist of mostly little scripts written in plain javascript by following tutorials etc. You can add something under the sandbox and run it within container. Since folder already added as volume you dont need to restart anything. To enter in sandbox;
 
-    $ docker exec -it poc_sandbox /bin/sh
+    docker exec -it poc_sandbox /bin/sh
 
 And when you in, simply run scripts as you want;
     
-    $ node rabbitmq/tutorial/hello-world/send.js
+    node rabbitmq/tutorial/hello-world/send.js
 
 Create a new terminal window and run the receiver also;
 
-    $ node rabbitmq/tutorial/hello-world/receive.js
+    node rabbitmq/tutorial/hello-world/receive.js
 
 You can run multiple receivers to observe things.
 
