@@ -36,7 +36,7 @@ To install and run application you only need to have installed and running [dock
     docker-compose up
 
 **Starting everything will take some time**, so be patient. When everything has started you can;
-  - Navigate to admin panel at [localhost:7070](http://localhost:7070/)
+  - Navigate to admin panel at [localhost:9090](http://localhost:9090/)
   - Other other [management screens](#management-screens)
 
 # Structure
@@ -62,16 +62,23 @@ A fake api for us to fetch data from. To imitate a real world scenarios external
 Some bash scripts to use when needed.
 
 # Management Screens
-- PostgreSQL: [localhost:7071](http://localhost:7071/)
+- Our Panel: [localhost:9090](http://localhost:9090/)
+- PostgreSQL: [localhost:9091](http://localhost:9091/)
   - **system:** *PostgreSQL*
   - **server:** *postgresql_server*
   - **username:** *poc_db_user*
   - **password:** *poc_db_pass*
   - **database:** *poc_db_name*
-- RabbitMQ: [localhost:7072](http://localhost:7072/)
+- RabbitMQ: [localhost:9092](http://localhost:9092/)
   - **username:** *poc_rmq_user*
   - **password:** *poc_rmq_pass*
-- Redis: [localhost:7073](http://localhost:7073/)
+- Redis: [localhost:9093](http://localhost:9093/)
+
+# Connection Points
+- API 7070
+- PostgreSQL 7071
+- RabbitMQ 7072
+- Redis 7073
 
 # Resources for Better Understanding 
   - Docker

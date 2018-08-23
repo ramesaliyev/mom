@@ -19,7 +19,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 7071:8080
+      - 9091:8080
     networks:
       - poc_network
     depends_on:
@@ -33,7 +33,7 @@ services:
       - RABBITMQ_DEFAULT_USER=poc_rmq_user
       - RABBITMQ_DEFAULT_PASS=poc_rmq_pass
     ports:
-      - 7072:15672
+      - 9092:15672
     networks:
       - poc_network
 
@@ -54,7 +54,7 @@ services:
     environment:
       - REDIS_HOSTS=local:redis_server:6379
     ports:
-      - 7073:8081
+      - 9093:8081
     networks:
       - poc_network
     depends_on:
@@ -87,10 +87,10 @@ services:
     volumes:
       - ./frontend/panel:/frontend/panel
     environment:
-      - PORT=7070
+      - PORT=9090
       - NODE_ENV=${NODE_ENV}
     ports:
-      - 7070:7070
+      - 9090:9090
     networks:
       - poc_network
 
