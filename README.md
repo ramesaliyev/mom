@@ -3,53 +3,6 @@ This is a demonstration of how to create simple yet capable architecture with [M
 
 On the tip of the [iceberg](https://www.wikiwand.com/en/Iceberg) we're only seeing an admin panel, where you can register, login, forgot your password, create campaigns etc. But under the hood (or below the sea level?) whole app running by queuing messages to do things. 
 
-[sandbox](#sandbox)
-
-# Installation & Running
-To install and run application you only need to have installed and running [docker](https://www.docker.com/products).
-#### Cloning Repo
-    git clone git@github.com:ramesaliyev/mom-based-architecture-poc.git
-#### Start Everything
-    docker-compose up
-**Starting everything will take some time**, so be patient. When everything has started you can;
-  - Navigate to admin panel at [localhost:7070](http://localhost:7070/)
-  - Other other [management screens](#management-screens)
-
-# Debugging
-## Frontend
-For front-end debugging start containers without panel
-    
-    docker-compose up postgresql_server postgresql_adminer rabbitmq redis_server redis_commander sandbox
-    
-Then start panel locally.
-
-    npm i
-    npm start
-  
-Then [see here](/frontend/panel/README.md) to debugging options.
-
-# Structure
-## Backend
-Our main MOM based architecture what is this POC about.
-
-## Frontend
-All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [reach-router](https://reach.tech/router), [redux](https://redux.js.org/) and [material-ui](https://material-ui.com/). Since this is a POC front-end code running in development mode by default. So your changes will effect immediately. 
-
-### Panel
-Right now we have only one front-end app which is our admin panel. 
-
-## Sandbox
-Seperated from our main application; the purpose of sandbox is making experiments for grasp better understanding over concepts, libraries etc. For more information and to learn how to use sandbox see [using sandbox](#using-sandbox) section.
-
-## External
-A fake api for us to fetch data from. To imitate a real world scenarios external api may randomly;
-- take long time to respond
-- respond with errors
-- occurs timeouts
-
-## Scripts
-Some bash scripts to use when needed.
-
 # Technologies
 - Backend
   - [Docker](https://www.docker.com/)
@@ -72,6 +25,41 @@ Some bash scripts to use when needed.
     - [Reach-Router](https://reach.tech/router)
     - [Redux](https://redux.js.org/)
     - [Socket.io](https://socket.io/)
+
+# Installation & Running
+To install and run application you only need to have installed and running [docker](https://www.docker.com/products).
+
+#### Cloning Repo
+    git clone git@github.com:ramesaliyev/mom-based-architecture-poc.git
+
+#### Start Everything
+    docker-compose up
+
+**Starting everything will take some time**, so be patient. When everything has started you can;
+  - Navigate to admin panel at [localhost:7070](http://localhost:7070/)
+  - Other other [management screens](#management-screens)
+
+# Structure
+## Backend
+Our main MOM based architecture what is this POC about.
+
+## Frontend
+All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [reach-router](https://reach.tech/router), [redux](https://redux.js.org/) and [material-ui](https://material-ui.com/). Since this is a POC front-end code running in development mode by default. So your changes will effect immediately. 
+
+### Panel
+Right now we have only one front-end app which is our admin panel. 
+
+## Sandbox
+Seperated from our main application; the purpose of sandbox is making experiments for grasp better understanding over concepts, libraries etc. For more information and to learn how to use sandbox see [using sandbox](#using-sandbox) section.
+
+## External
+A fake api for us to fetch data from. To imitate a real world scenarios external api may randomly;
+- take long time to respond
+- respond with errors
+- occurs timeouts
+
+## Scripts
+Some bash scripts to use when needed.
 
 # Management Screens
 - PostgreSQL: [localhost:7071](http://localhost:7071/)
@@ -124,6 +112,19 @@ Create a new terminal window and run the receiver also;
     node rabbitmq/tutorial/hello-world/receive.js
 
 You can run multiple receivers to observe things.
+
+# Debugging
+## Frontend
+For front-end debugging start containers without panel.
+    
+    docker-compose up postgresql_server rabbitmq redis_server
+    
+Then start panel locally.
+
+    npm i
+    npm start
+  
+Now you can use your favorite editor to debugging. [See here](/frontend/panel/README.md) for editor integrations.
 
 # TODO
 - Some visualisation about journey of messages would be nice.
