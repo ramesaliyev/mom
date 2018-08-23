@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [{
+    "name": "Frontend/Panel Chrome",
+    "type": "chrome",
+    "request": "launch",
+    "url": "http://localhost:7070",
+    "webRoot": "${workspaceRoot}/frontend/panel/src",
+    "sourceMapPathOverrides": {
+      "webpack:///frontend/panel/src*": "${webRoot}/*"
+    }
+  }]
+}
