@@ -73,6 +73,10 @@ services:
       - MESSAGE_QUEUE=amqp://poc_rmq_user:poc_rmq_pass@rabbitmq
     networks:
       - poc_network
+    depends_on:
+      - postgresql_server
+      - rabbitmq
+      - redis_server
 
   panel:
     container_name: poc_panel
