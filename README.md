@@ -6,10 +6,12 @@ On the tip of the [iceberg](https://www.wikiwand.com/en/Iceberg) we're only seei
 # Technologies
 - Backend
   - [Docker](https://www.docker.com/)
+  - [JWT](https://jwt.io/)
   - [NodeJS](https://nodejs.org/)
     - Libraries
       - [AMQP.Node](https://github.com/squaremo/amqp.node)
       - [Nest Framework](https://nestjs.com/)
+      - [TypeORM](http://typeorm.io/)
   - [PostgreSQL](https://www.postgresql.org/)
   - [RabbitMQ](https://www.rabbitmq.com/)
     - Plugins
@@ -142,3 +144,4 @@ Now you can use your favorite editor to debugging. [See here](/frontend/panel/RE
 # TODO
 - Some visualisation about journey of messages would be nice.
 - Use RabbitMQ with rabbitmq-delayed-message-exchange [plugin](https://hub.docker.com/r/tetsuobe/rabbitmq-delayed-message-exchange/~/dockerfile/).
+- Put nginx in front of front-end in docker-compose.

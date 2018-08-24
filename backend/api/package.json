@@ -5,27 +5,28 @@
   "author": "Rames Aliyev",
   "license": "MIT",
   "scripts": {
-    "format": "prettier --write \"**/*.ts\"",
-    "start": "ts-node -r tsconfig-paths/register src/main.ts",
-    "start:dev": "nodemon",
     "prestart:prod": "rm -rf dist && tsc",
-    "start:prod": "node dist/main.js",
-    "start:hmr": "node dist/server",
-    "test": "jest",
-    "test:cov": "jest --coverage",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "webpack": "webpack --config webpack.config.js"
+    "start:prod": "NODE_PATH=dist/ node dist/main.js",
+    "start": "nodemon"
   },
   "dependencies": {
     "@nestjs/common": "5.0.0",
     "@nestjs/core": "5.0.0",
-    "class-transformer": "^0.1.9",
-    "class-validator": "^0.9.1",
+    "@nestjs/passport": "^1.1.0",
+    "@nestjs/typeorm": "5.2.0",
+    "class-transformer": "0.1.9",
+    "class-validator": "0.9.1",
+    "credential": "^2.0.0",
+    "dotenv": "^6.0.0",
     "fastify-formbody": "2.0.0",
-    "joi": "^13.6.0",
-    "nestjs-config": "^1.2.2",
+    "lodash.pick": "^4.4.0",
+    "nestjs-config": "1.2.2",
+    "passport": "^0.4.0",
+    "passport-http-bearer": "^1.0.1",
+    "pg": "7.4.3",
     "reflect-metadata": "0.1.12",
     "rxjs": "6.0.0",
+    "typeorm": "0.2.7",
     "typescript": "2.6.2"
   },
   "devDependencies": {
@@ -36,28 +37,8 @@
     "@types/supertest": "2.0.4",
     "jest": "21.2.1",
     "nodemon": "1.14.1",
-    "prettier": "1.11.1",
-    "supertest": "3.0.0",
-    "ts-jest": "21.2.4",
     "ts-loader": "4.1.0",
     "ts-node": "4.1.0",
-    "tsconfig-paths": "3.1.1",
-    "tslint": "5.3.2",
-    "webpack": "4.2.0",
-    "webpack-cli": "2.0.13",
-    "webpack-node-externals": "1.6.0"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "coverageDirectory": "../coverage"
+    "tsconfig-paths": "3.1.1"
   }
 }

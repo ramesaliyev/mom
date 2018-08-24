@@ -1,13 +1,17 @@
+/**
+ * Get Environment Configs
+ */
+import { config as getEnvironmentConfigs } from 'dotenv';
+getEnvironmentConfigs();
+
+/**
+ * & Stuff
+ */
 import { NestFactory } from '@nestjs/core';
-import { ApplicationModule } from 'app.module';
-import { AuthGuard } from 'guards/auth.guards';
-import { TimeoutInterceptor } from 'interceptors/timeout.interceptor';
+import { CoreApplicatonModule } from 'core/core.module';
 
-async function bootstrap() {
-  const app = await NestFactory.create(ApplicationModule);
-
-  app.useGlobalGuards(new AuthGuard());
-  app.useGlobalInterceptors(new TimeoutInterceptor());
+export async function bootstrap() {
+  const app = await NestFactory.create(CoreApplicatonModule);
 
   await app.listen(process.env.PORT);
 }
