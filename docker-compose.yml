@@ -11,6 +11,8 @@ services:
       - POSTGRES_DB=poc_db_name
     volumes:
       - poc_volume_postgresql:/var/lib/postgresql/data
+    ports:
+      - 7071:5432
     networks:
       - poc_network
 
@@ -33,6 +35,7 @@ services:
       - RABBITMQ_DEFAULT_USER=poc_rmq_user
       - RABBITMQ_DEFAULT_PASS=poc_rmq_pass
     ports:
+      - 7072:5672
       - 9092:15672
     networks:
       - poc_network
@@ -44,6 +47,8 @@ services:
     restart: always
     volumes:
       - poc_volume_redis:/data
+    ports:
+      - 7073:6379
     networks:
       - poc_network
 

@@ -75,10 +75,16 @@ Some bash scripts to use when needed.
 - Redis: [localhost:9093](http://localhost:9093/)
 
 # Connection Points
-- API 7070
-- PostgreSQL 7071
-- RabbitMQ 7072
-- Redis 7073
+- API:
+  - **hostname:** localhost:7070
+- PostgreSQL
+  - **hostname:** localhost:7071
+  - *others same as above*
+- RabbitMQ
+  - **hostname:** localhost:7072
+  - *others same as above*
+- Redis
+  - **hostname:** localhost:7073
 
 # Resources for Better Understanding 
   - Docker
@@ -122,9 +128,9 @@ You can run multiple receivers to observe things.
 
 # Debugging
 ## Frontend
-For front-end debugging start containers without panel.
+For front-end debugging start containers without panel. You can also start management containers if you want.
     
-    docker-compose up postgresql_server rabbitmq redis_server
+    docker-compose up api postgresql_server rabbitmq redis_server
     
 Then start panel locally.
 
