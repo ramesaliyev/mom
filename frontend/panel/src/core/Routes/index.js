@@ -1,15 +1,11 @@
 import React from 'react';
 import { Router } from "@reach/router";
 
-import PageRegister from 'pages/Register'; 
-import PageLogin from 'pages/Login'; 
-import PageForgotPassword from 'pages/ForgotPassword'; 
+import PageLoginOrRegister from 'pages/LoginOrRegister'; 
 
 const Routes = props => (
   <Router>
-    <PageRegister path="/register" />
-    <PageLogin path="/login" />
-    <PageForgotPassword path="/forgot-password" />
+    <PageLoginOrRegister path="/login-or-register" />
   </Router>
 );
 

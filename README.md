@@ -46,7 +46,7 @@ To install and run application you only need to have installed and running [dock
 Our main MOM based architecture what is this POC about.
 
 ## Frontend
-All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [reach-router](https://reach.tech/router), [redux](https://redux.js.org/) and [material-ui](https://material-ui.com/). Since this is a POC front-end code running in development mode by default. So your changes will effect immediately. 
+All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [reach-router](https://reach.tech/router), [redux](https://redux.js.org/) and [material-ui](https://material-ui.com/). 
 
 ### Panel
 Right now we have only one front-end app which is our admin panel. 

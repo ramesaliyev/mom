@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import { isUserLoggedIn, getUserInfo } from 'selectors/user';
-import { topMenuItems, bottomMenuItems } from './menu-items';
+
+import AppBarComponent from './components/appbar';
+import DrawerComponent from './components/drawer';
 
 import styles from './index.styles'
 
@@ -26,7 +18,6 @@ class MiniDrawer extends Component {
 
   constructor(props) {
     super(props);
-
     this.toggleDrawer = this.toggleDrawer.bind(this);
   }
 
@@ -37,56 +28,25 @@ class MiniDrawer extends Component {
   };
 
   render() {
-    const { classes, children, userInfo } = this.props;
+    const { classes, children, isUserLoggedIn } = this.props;
     const { isDrawerOpen } = this.state;
-    
-    console.log(userInfo);
-
-    const AppBarClasses = classNames(classes.appBar, {
-      [classes.appBarShift]: isDrawerOpen
-    });
-
-    const ToolbarIconClasses = classNames(classes.menuButton, {
-      [classes.hide]: isDrawerOpen
-    });
-
-    const DrawerPapperClasses = classNames(classes.drawerPaper, {
-      [classes.drawerPaperClose]: !isDrawerOpen
-    });
 
     return (
       <div className={classes.root}>
-        <AppBar position="absolute" className={AppBarClasses}>
-          <Toolbar disableGutters={!isDrawerOpen}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.toggleDrawer}
-              className={ToolbarIconClasses}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="title" color="inherit" noWrap>
-              MOM Based Architecture POC | Panel
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        <AppBarComponent 
+          classes={classes}
+          isDrawerOpen={isDrawerOpen}
+          onMenuClick={this.toggleDrawer}
+          showMenuButton={isUserLoggedIn}
+        />
 
-        <Drawer
-          variant="permanent"
-          classes={{ paper: DrawerPapperClasses }}
-          open={isDrawerOpen}
-        >
-          <div className={classes.toolbar}>
-            <IconButton onClick={this.toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <List>{topMenuItems}</List>
-          <Divider />
-          <List>{bottomMenuItems}</List>
-        </Drawer>
+        {isUserLoggedIn &&
+          <DrawerComponent
+            classes={classes}
+            isDrawerOpen={isDrawerOpen}
+            onChevronClick={this.toggleDrawer}
+          />
+        }
 
         <main className={classes.content}>
           <div className={classes.toolbar} />

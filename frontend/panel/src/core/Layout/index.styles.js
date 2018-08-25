@@ -24,7 +24,7 @@ export default (theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
+  menuButtonWrapper: {
     marginLeft: 12,
     marginRight: 36,
   },
