@@ -20,7 +20,7 @@ export class UserService {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+    return await this.userRepository.find({ cache : true }); // caching to redis example
   }
 
   async create(userDTO: UserDTO): Promise<User[]> {

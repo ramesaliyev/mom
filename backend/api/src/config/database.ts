@@ -4,6 +4,8 @@ const {
   POSTGRESQL_USERNAME,
   POSTGRESQL_PASSWORD,
   POSTGRESQL_DATABASE,
+  REDIS_HOSTNAME,
+  REDIS_PORT,
 } = process.env;
 
 export const DatabaseConfig = {
@@ -17,4 +19,11 @@ export const DatabaseConfig = {
     __dirname + '/../**/*.entity.{ts,js}'
   ],
   synchronize: true,
+  cache: {
+    type: "redis",
+    options: {
+      host: REDIS_HOSTNAME,
+      port: REDIS_PORT,
+    }
+  }
 };

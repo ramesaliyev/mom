@@ -1,5 +1,7 @@
 import { Get, Post, Controller, UsePipes, ValidationPipe, Body, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+
+import { AuthGuard } from 'guards/auth.guard';
+import { User } from 'decorators/user.decorator';
 
 import { LoginDTO } from './auth.dto';
 import { AuthService } from './auth.service';
@@ -20,9 +22,8 @@ export class AuthController {
   }
 
   @Get('auth-test')
-  @UseGuards(AuthGuard('jwt'))
-  test(@Body() falan: any) {
-    console.log(falan);
-    return 'Authorized!';
+  @UseGuards(AuthGuard)
+  test(@User() user) {
+    return [ 'Authorized user!', user ];
   }
 }

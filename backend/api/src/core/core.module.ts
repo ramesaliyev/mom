@@ -19,6 +19,5 @@ import { AuthModule } from 'modules/auth/auth.module';
     AuthModule
   ],
   controllers: [CoreController],
-  exports: [],
 })
 export class CoreApplicatonModule {}

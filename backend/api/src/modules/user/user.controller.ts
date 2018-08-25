@@ -9,7 +9,8 @@ export class UserController {
   
   @Get()
   async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+    const users = await this.userService.findAll();
+    return users.map(user => user.safeResponse());
   }
 
   @Post()

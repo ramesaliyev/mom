@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { CacheService } from 'core/services/cache.service';
 import { UserService } from 'modules/user/user.service';
 import { LoginDTO } from './auth.dto';
 
@@ -9,6 +10,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly cacheService: CacheService,
   ) {}
 
   async login(loginDTO: LoginDTO): Promise<any> {
@@ -25,15 +27,38 @@ export class AuthService {
     }
 
     const userSafeResponse = user.safeResponse();
-    const accessToken = this.jwtService.sign(userSafeResponse);
+    const accessToken = await this.createToken(userSafeResponse);
 
+    await this.cacheService.set(
+      this.getCacheKey(user.id),
+      accessToken,
+      { expire: process.env.LOGIN_EXPIRES_IN_SECONDS }
+    );
+    
     return {
       ...userSafeResponse,
-      token: `Bearer ${accessToken}`
+      accessToken
     };
   }
 
-  async validateUser(): Promise<any> {
-    return true;
+  getCacheKey(id: number): string {
+    return `userToken[${id}]`;
+  }
+
+  async createToken(payload: any): Promise<string> {
+    return await this.jwtService.sign(payload);
+  }
+
+  async verifyToken(token: string): Promise<boolean> {
+    const user = await this.jwtService.verify(token);
+    const cachedToken = await this.cacheService.get(this.getCacheKey(user.id));
+
+    if (token !== cachedToken) {
+      throw {
+        message: "Old Token"
+      }
+    }
+
+    return user;
   }
 }
