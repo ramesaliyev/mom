@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -13,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
+import { isUserLoggedIn, getUserInfo } from 'selectors/user';
 import { topMenuItems, bottomMenuItems } from './menu-items';
 
 import styles from './index.styles'
@@ -35,9 +37,11 @@ class MiniDrawer extends Component {
   };
 
   render() {
-    const { classes, children } = this.props;
+    const { classes, children, userInfo } = this.props;
     const { isDrawerOpen } = this.state;
     
+    console.log(userInfo);
+
     const AppBarClasses = classNames(classes.appBar, {
       [classes.appBarShift]: isDrawerOpen
     });
@@ -98,4 +102,14 @@ MiniDrawer.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(MiniDrawer);
+const mapDispatchToProps = ({
+});
+
+const mapStateToProps = state => ({
+  userInfo: getUserInfo(state),
+  isUserLoggedIn: isUserLoggedIn(state)
+});
+
+export default withStyles(styles, { withTheme: true })(
+  connect(mapStateToProps, mapDispatchToProps)(MiniDrawer)
+);

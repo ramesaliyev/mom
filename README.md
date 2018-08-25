@@ -39,7 +39,7 @@ To install and run application you only need to have installed and running [dock
 
 **Starting everything will take some time**, so be patient. When everything has started you can;
   - Navigate to admin panel at [localhost:9090](http://localhost:9090/)
-  - Other other [management screens](#management-screens)
+  - See other [management screens](#management-screens)
 
 # Structure
 ## Backend
@@ -144,4 +144,3 @@ Now you can use your favorite editor to debugging. [See here](/frontend/panel/RE
 # TODO
 - Some visualisation about journey of messages would be nice.
 - Use RabbitMQ with rabbitmq-delayed-message-exchange [plugin](https://hub.docker.com/r/tetsuobe/rabbitmq-delayed-message-exchange/~/dockerfile/).
-- Put nginx in front of front-end in docker-compose.
