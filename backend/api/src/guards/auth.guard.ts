@@ -5,7 +5,7 @@ import { AuthService } from 'modules/auth/auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private readonly authService: AuthService) {}
 
-  async canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<any> {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization; 
     

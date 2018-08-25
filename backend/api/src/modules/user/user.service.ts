@@ -2,7 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { UserDTO } from './user.UserDTO';
+import { UserDTO } from './user.dto';
 
 @Injectable()
 export class UserService {
