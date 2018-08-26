@@ -1,16 +1,17 @@
-import { takeLatest, select } from 'redux-saga/effects';
+import { takeLatest, put, select } from 'redux-saga/effects';
 
-import { addDefaultHeaders } from 'config';
 import { APP_INITIALIZED } from 'symbols/app';
-import { getUserToken } from 'selectors/user';
+import { actionDoSignInSuccess } from 'actions/user/signin';
+import { getUserInfo } from 'selectors/user';
 
 function* watcher() {
   yield takeLatest(APP_INITIALIZED, function* ({ payload }) {
     const state = yield select();
+    const userInfo = getUserInfo(state);
 
-    addDefaultHeaders({
-      Authorization: getUserToken(state)
-    });
+    if (userInfo) {
+      yield put(actionDoSignInSuccess(userInfo));
+    }
   });
 }
 

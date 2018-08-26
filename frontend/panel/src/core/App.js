@@ -1,29 +1,34 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom'
-
-import 'typeface-roboto'
+import { ToastContainer } from 'react-toastify';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import 'typeface-roboto'
+import 'react-toastify/dist/ReactToastify.css';
+
 import { actionAppInitialized } from 'actions/app/init';
-import './App.css';
-import { configureStore } from './store';
+import { getStore } from './store';
 import Boundary from './boundary';
 import Layout from './layout';
 import Routes from './routes';
 
-const store = configureStore();
-store.dispatch(actionAppInitialized());
+import './App.css';
+
+getStore().dispatch(actionAppInitialized());
 
 const App = props => (
-  <Provider store={store}>
+  <Provider store={getStore()}>
     <BrowserRouter>
-      <Boundary>
-        <CssBaseline />
-        <Layout>
-          <Routes />
-        </Layout>
-      </Boundary>
+      <Fragment>
+        <Boundary>
+          <CssBaseline />
+          <Layout>
+            <Routes />
+          </Layout>
+        </Boundary>
+        <ToastContainer />
+      </Fragment>
     </BrowserRouter>
   </Provider>
 );

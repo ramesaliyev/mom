@@ -7,7 +7,7 @@ import rootSaga from 'sagas';
 import persistMiddleware from './persister';
 import getInitialState from './initial-state';
 
-export const configureStore = () => {
+const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
 
   // Redux debug tool (source: https://github.com/zalmoxisus/redux-devtools-extension)
@@ -23,3 +23,8 @@ export const configureStore = () => {
 
   return store;
 };
+
+let store;
+export const getStore = () =>
+  store = store || configureStore()
+  

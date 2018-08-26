@@ -18,6 +18,7 @@ On the tip of the [iceberg](https://www.wikiwand.com/en/Iceberg) we're only seei
       - [Delayed Message Exchange](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange)
       - [Management](https://github.com/rabbitmq/rabbitmq-management)
   - [Redis](https://redis.io/)
+  - [Socket.io](https://socket.io/)
   - [TypeScript](https://www.typescriptlang.org/)
 - Frontend
   - Libraries
@@ -27,7 +28,6 @@ On the tip of the [iceberg](https://www.wikiwand.com/en/Iceberg) we're only seei
     - [React-Router](https://github.com/ReactTraining/react-router)
     - [Redux](https://redux.js.org/)
     - [Redux-Saga](https://github.com/redux-saga/redux-saga)
-    - [Socket.io](https://socket.io/)
 
 # Installation & Running
 To install and run application you only need to have installed and running [docker](https://www.docker.com/products).
@@ -77,9 +77,11 @@ Some bash scripts to use when needed.
   - **password:** *poc_rmq_pass*
 - Redis: [localhost:9093](http://localhost:9093/)
 
-# Connection Points
+#  Connection Points
 - API:
   - **hostname:** localhost:7070
+- Socket:
+  - **hostname:** localhost:7080
 - PostgreSQL
   - **hostname:** localhost:7071
   - *others same as above*

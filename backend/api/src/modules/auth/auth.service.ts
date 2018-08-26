@@ -46,7 +46,7 @@ export class AuthService {
   }
 
   getCacheKey(id: number): string {
-    return `userToken[${id}]`;
+    return `${process.env.USER_TOKEN_CACHE_PREFIX}${id}`;
   }
 
   async createToken(payload: any): Promise<string> {

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowJs": true, 
+    "module": "commonjs", 
+    "target": "ES2017",
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": [
+    "./src/*.ts",
+    "./src/model/*.ts"
+  ]
+}
