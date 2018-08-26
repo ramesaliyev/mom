@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { CacheService } from 'core/services/cache.service';
 import { UserModule } from 'modules/user/user.module';
+
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 

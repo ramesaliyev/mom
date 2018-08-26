@@ -24,8 +24,9 @@ On the tip of the [iceberg](https://www.wikiwand.com/en/Iceberg) we're only seei
     - [Axios](https://github.com/axios/axios)
     - [Material-UI](https://material-ui.com/)
     - [React](https://reactjs.org/)
-    - [Reach-Router](https://reach.tech/router)
+    - [React-Router](https://github.com/ReactTraining/react-router)
     - [Redux](https://redux.js.org/)
+    - [Redux-Saga](https://github.com/redux-saga/redux-saga)
     - [Socket.io](https://socket.io/)
 
 # Installation & Running
@@ -46,7 +47,7 @@ To install and run application you only need to have installed and running [dock
 Our main MOM based architecture what is this POC about.
 
 ## Frontend
-All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [reach-router](https://reach.tech/router), [redux](https://redux.js.org/) and [material-ui](https://material-ui.com/). 
+All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [react-router](https://github.com/ReactTraining/react-router), [redux](https://redux.js.org/), [redux-saga](https://github.com/redux-saga/redux-saga) and [material-ui](https://material-ui.com/). 
 
 ### Panel
 Right now we have only one front-end app which is our admin panel. 

@@ -25,6 +25,10 @@ export class CacheService {
       ]
     }
 
-    return client.set(...args);
+    return await client.set(...args);
+  }
+
+  async remove(key: string): Promise<any> {
+    return await client.del(key);
   }
 }

@@ -1,12 +1,14 @@
 import React from 'react';
-import { Router } from "@reach/router";
+import { Switch, Route } from 'react-router-dom'
 
 import PageLoginOrRegister from 'pages/LoginOrRegister'; 
+import PageHome from 'pages/Home'; 
 
 const Routes = props => (
-  <Router>
-    <PageLoginOrRegister path="/login-or-register" />
-  </Router>
+  <Switch>
+    <Route exact path="/" component={PageHome}/>
+    <Route path="/login-or-register" component={PageLoginOrRegister}/>
+  </Switch>
 );
 
 export default Routes;

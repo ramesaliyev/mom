@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { navigate } from "@reach/router"
+import { withRouter, Redirect } from "react-router-dom";
 
 import { isUserLoggedIn } from 'selectors/user';
 
 class Boundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
-
-    this.checkLogin(props);
+    this.state = {
+      redirectTo: null,
+      hasError: false
+    };
   }
   
-  componentWillReceiveProps(nextProps) {
-    this.checkLogin(nextProps);
-  }
-  
-  checkLogin({ isUserLoggedIn }) {
-    !isUserLoggedIn && navigate('/login-or-register');
-  }
-
   componentDidCatch(error, info) {
     console.error(error, info)
     this.setState({ hasError: true });
   }
 
   render() {
-    const { children } = this.props;
+    const { children, location, isUserLoggedIn } = this.props;
     const { hasError } = this.state;
+    
+    const entrancePagePathname = '/login-or-register';
+    if (!isUserLoggedIn && location.pathname !== entrancePagePathname) {
+      return (
+        <Redirect to={entrancePagePathname} />
+      );
+    }
 
     if (hasError) {
       return (
@@ -51,6 +51,6 @@ const mapStateToProps = state => ({
   isUserLoggedIn: isUserLoggedIn(state)
 });
 
-export default (
+export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(Boundary)
 );

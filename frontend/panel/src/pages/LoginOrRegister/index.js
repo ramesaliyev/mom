@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Paper from '@material-ui/core/Paper';
 
+import { isUserLoggedIn } from 'selectors/user';
 import LoginScreen from './login';
 import RegisterScreen from './register';
 
@@ -24,26 +29,58 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
   },
+  spinner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: '200px'
+  }
 });
 
-class SimpleTabs extends React.Component {
-  state = {
-    value: 0,
+class LoginOrRegister extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: 0,
+      loading: props.isUserLoggedIn
+    }
+
+    this.showSpinner = this.showSpinner.bind(this);
   };
 
   handleChange = (event, value) => {
     this.setState({ value });
   };
 
+  showSpinner() {
+    this.setState({
+      loading: true
+    })
+  }
+
   render() {
-    const { classes } = this.props;
-    const { value } = this.state;
+    const { classes, isUserLoggedIn } = this.props;
+    const { value, loading } = this.state;
+
+    if (isUserLoggedIn) {
+      return (
+        <Redirect to="/"/>
+      );
+    }
+
+    if (loading) {
+      return (
+        <main className={classes.spinner}>
+          <CircularProgress size={70} />
+        </main>
+      );
+    }
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <Paper>
           <Tabs
             value={value}
             onChange={this.handleChange}
@@ -52,16 +89,35 @@ class SimpleTabs extends React.Component {
             <Tab label="Login" />
             <Tab label="Register" />
           </Tabs>
-        </AppBar>
-        {value === 0 && <TabContainer><LoginScreen /></TabContainer>}
-        {value === 1 && <TabContainer><RegisterScreen /></TabContainer>}
+        </Paper>
+
+        {value === 0 &&
+          <TabContainer>
+            <LoginScreen onLoading={this.showSpinner} />
+          </TabContainer>
+        }
+
+        {value === 1 &&
+          <TabContainer>
+            <RegisterScreen onLoading={this.showSpinner} />
+          </TabContainer>
+        }
       </div>
     );
   }
 }
 
-SimpleTabs.propTypes = {
+LoginOrRegister.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleTabs);
+const mapDispatchToProps = ({
+});
+
+const mapStateToProps = state => ({
+  isUserLoggedIn: isUserLoggedIn(state),
+});
+
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(LoginOrRegister)
+);

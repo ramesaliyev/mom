@@ -41,6 +41,10 @@ export class AuthService {
     };
   }
 
+  async logout(user: any) {
+    return await await this.cacheService.remove(this.getCacheKey(user.id));
+  }
+
   getCacheKey(id: number): string {
     return `userToken[${id}]`;
   }

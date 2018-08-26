@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -30,6 +32,10 @@ class MiniDrawer extends Component {
   render() {
     const { classes, children, isUserLoggedIn } = this.props;
     const { isDrawerOpen } = this.state;
+    
+    const ContentClasses = classNames(classes.content, {
+      [classes.contentPadding]: isUserLoggedIn
+    });
 
     return (
       <div className={classes.root}>
@@ -48,7 +54,7 @@ class MiniDrawer extends Component {
           />
         }
 
-        <main className={classes.content}>
+        <main className={ContentClasses}>
           <div className={classes.toolbar} />
           {children}
         </main>
@@ -71,5 +77,7 @@ const mapStateToProps = state => ({
 });
 
 export default withStyles(styles, { withTheme: true })(
+  withRouter(
   connect(mapStateToProps, mapDispatchToProps)(MiniDrawer)
+  )
 );
