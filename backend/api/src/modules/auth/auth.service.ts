@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { CacheService } from 'core/services/cache.service';
 import { UserService } from 'modules/user/user.service';
+import { UserDTO } from 'modules/user/user.dto';
 import { LoginDTO } from './auth.dto';
 
 @Injectable()
@@ -42,7 +43,11 @@ export class AuthService {
   }
 
   async logout(user: any) {
-    return await await this.cacheService.remove(this.getCacheKey(user.id));
+    return await this.cacheService.remove(this.getCacheKey(user.id));
+  }
+
+  async register(user: UserDTO) {
+    return await this.userService.create(user);
   }
 
   getCacheKey(id: number): string {

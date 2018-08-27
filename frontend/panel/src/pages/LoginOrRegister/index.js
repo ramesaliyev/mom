@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 
-import { isUserLoggedIn } from 'selectors/user';
+import { isUserLoggedIn, isUserLoginInProgress, isUserRegisteringInProgress } from 'selectors/user';
 import LoginScreen from './login';
 import RegisterScreen from './register';
 
@@ -46,23 +46,20 @@ class LoginOrRegister extends Component {
       value: 0,
       loading: props.isUserLoggedIn
     }
-
-    this.showSpinner = this.showSpinner.bind(this);
   };
 
   handleChange = (event, value) => {
     this.setState({ value });
   };
 
-  showSpinner() {
-    this.setState({
-      loading: true
-    })
-  }
-
   render() {
-    const { classes, isUserLoggedIn } = this.props;
-    const { value, loading } = this.state;
+    const {
+      classes,
+      isUserLoggedIn,
+      isUserLoginInProgress,
+      isUserRegisteringInProgress
+    } = this.props;
+    const { value } = this.state;
 
     if (isUserLoggedIn) {
       return (
@@ -70,7 +67,7 @@ class LoginOrRegister extends Component {
       );
     }
 
-    if (loading) {
+    if (isUserLoginInProgress || isUserRegisteringInProgress) {
       return (
         <main className={classes.spinner}>
           <CircularProgress size={70} />
@@ -93,13 +90,13 @@ class LoginOrRegister extends Component {
 
         {value === 0 &&
           <TabContainer>
-            <LoginScreen onLoading={this.showSpinner} />
+            <LoginScreen />
           </TabContainer>
         }
 
         {value === 1 &&
           <TabContainer>
-            <RegisterScreen onLoading={this.showSpinner} />
+            <RegisterScreen />
           </TabContainer>
         }
       </div>
@@ -116,6 +113,8 @@ const mapDispatchToProps = ({
 
 const mapStateToProps = state => ({
   isUserLoggedIn: isUserLoggedIn(state),
+  isUserLoginInProgress: isUserLoginInProgress(state),
+  isUserRegisteringInProgress: isUserRegisteringInProgress(state),
 });
 
 export default withStyles(styles)(

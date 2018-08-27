@@ -2,6 +2,7 @@ import { Get, Post, Controller, UsePipes, ValidationPipe, Body, Query, UseGuards
 
 import { AuthGuard } from 'guards/auth.guard';
 import { User } from 'decorators/user.decorator';
+import { UserDTO } from 'modules/user/user.dto';
 
 import { LoginDTO } from './auth.dto';
 import { AuthService } from './auth.service';
@@ -29,7 +30,19 @@ export class AuthController {
     return {
       success: await this.authService.logout(user)
     }
-  }  
+  }
+  
+  @Post('register')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      skipMissingProperties: true,
+      whitelist: true,
+    }),
+  )
+  async register(@Body() userDTO: UserDTO) {
+    return await this.authService.register(userDTO);
+  }
 
   @Get('auth-test')
   @UseGuards(AuthGuard)

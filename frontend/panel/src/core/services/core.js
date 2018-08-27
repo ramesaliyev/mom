@@ -32,16 +32,6 @@ const parseConfig = (config) => ({
   pathname: config.url.replace(config.baseURL, '')
 });
 
-const notifyResponse = (type, { response, config }) => {
-  const { status } = response;
-  const { method, pathname } = parseConfig(config);
-
-  notify(
-    type.toLowerCase(),
-    `[${method}] ${type} (${status}) ${pathname}`
-  );
-}
-
 axios.interceptors.request.use(config => {
   const { method, pathname } = parseConfig(config);
   notify('info', `[${method}]  ${pathname}`);
@@ -56,24 +46,33 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(
   response => {
-    notifyResponse('Success', {
-      response,
-      config: response.config
-    });
+    const { status, config } = response;
+    const { method, pathname } = parseConfig(config);
+
+    notify(
+      'success',
+      `[${method}] Success (${status}) ${pathname}`
+    );
     
     return response;
   },
   error => {
     const { config, response } = error;
-    const { status } = response;
-    const { pathname } = parseConfig(config);
+    const { status, data } = response;
+    const { method, pathname } = parseConfig(config);
 
-    notifyResponse('Error', {
-      response,
-      config
-    });
+    const message = data.message || data.error;
 
-    if (status === 401 && pathname !== '/logout') {
+    notify(
+      'error',
+      `[${method}] Error (${status}) ${pathname} "${message}"`
+    );
+
+    if (
+      status === 401 &&
+      pathname !== '/login' &&
+      pathname !== '/logout'
+    ) {
       getStore().dispatch(actionDoSignOut());
     }
 

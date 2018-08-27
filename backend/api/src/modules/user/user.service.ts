@@ -23,7 +23,7 @@ export class UserService {
     return await this.userRepository.find({ cache : true }); // caching to redis example
   }
 
-  async create(userDTO: UserDTO): Promise<User[]> {
+  async create(userDTO: UserDTO): Promise<UserDTO> {
     const user = this.userRepository.create(userDTO);
     
     const isExist = await this.findOneByEmail(user.email);
@@ -34,6 +34,6 @@ export class UserService {
 
     await this.userRepository.save(user);
 
-    return user.safeResponse();
+    return userDTO;
   }
 }

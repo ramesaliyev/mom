@@ -3,10 +3,9 @@ import {
 } from 'symbols/app';
 
 import {
-  DO_SIGNIN,
-  DO_SIGNIN_SUCCESS,
-  DO_SIGNIN_FAILURE,
-  DO_SIGNOUT,
+  DO_SIGNUP,
+  DO_SIGNUP_SUCCESS,
+  DO_SIGNUP_FAILURE,
 } from 'symbols/user';
 
 export default (
@@ -19,15 +18,15 @@ export default (
         ...state,
         loading: false
       }
-
-    case DO_SIGNIN:
+      
+    case DO_SIGNUP:
       return {
         error: null,
         info: null,
         loading: true,
       };
 
-    case DO_SIGNIN_SUCCESS:
+    case DO_SIGNUP_SUCCESS:
       return {
         ...state,
         error: null,
@@ -35,22 +34,14 @@ export default (
         loading: true,
       };
 
-    case DO_SIGNIN_FAILURE:
+    case DO_SIGNUP_FAILURE:
       return {
         ...state,
         error: action.error,
         info: null,
-        loading: true,
-      };
-
-    case DO_SIGNOUT:
-      return {
-        ...state,
-        error: null,
-        info: null,
         loading: false,
       };
-
+      
     default:
       return state;
   }

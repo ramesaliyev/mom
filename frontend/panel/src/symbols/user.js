@@ -3,3 +3,7 @@ export const DO_SIGNIN_SUCCESS = 'DO_SIGNIN_SUCCESS';
 export const DO_SIGNIN_FAILURE = 'DO_SIGNIN_FAILURE';
 
 export const DO_SIGNOUT = 'DO_SIGNOUT';
+
+export const DO_SIGNUP = 'DO_SIGNUP';
+export const DO_SIGNUP_SUCCESS = 'DO_SIGNUP_SUCCESS';
+export const DO_SIGNUP_FAILURE = 'DO_SIGNUP_FAILURE';

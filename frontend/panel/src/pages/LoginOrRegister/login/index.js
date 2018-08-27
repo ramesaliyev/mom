@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import { actionDoSignIn } from 'actions/user/signin';
-import { isUserLoggedIn, isUserLoginInProgress } from 'selectors/user';
+import { isUserLoginInProgress } from 'selectors/user';
 
 import styles from './index.styles';
 
@@ -49,6 +49,9 @@ class SignIn extends Component {
 
   submit(e) {
     e.preventDefault();
+    if (this.props.isUserLoginInProgress) {
+      return;
+    }
 
     this.props.actionDoSignIn(this.state.payload);
   }
@@ -109,7 +112,6 @@ const mapDispatchToProps = ({
 });
 
 const mapStateToProps = state => ({
-  isUserLoggedIn: isUserLoggedIn(state),
   isUserLoginInProgress: isUserLoginInProgress(state)
 });
 
