@@ -35,7 +35,6 @@ class Socket {
 
     this.on('auth-error', (reason) => {
       getStore().dispatch(actionDoSignOut());
-      this.destroy();
     });
 
     this.on('deauthenticated', () => {
@@ -74,7 +73,7 @@ class Socket {
   }
 
   destroy() {
-    this.socket && this.socket.close();
+    this.socket && this.socket.disconnect();
     Socket.instance = null;
   }
 

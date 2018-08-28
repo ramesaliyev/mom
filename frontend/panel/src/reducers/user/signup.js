@@ -31,7 +31,7 @@ export default (
         ...state,
         error: null,
         info: action.data,
-        loading: true,
+        loading: false,
       };
 
     case DO_SIGNUP_FAILURE:

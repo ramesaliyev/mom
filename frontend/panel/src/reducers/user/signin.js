@@ -32,7 +32,7 @@ export default (
         ...state,
         error: null,
         info: action.data,
-        loading: true,
+        loading: false,
       };
 
     case DO_SIGNIN_FAILURE:
@@ -40,7 +40,7 @@ export default (
         ...state,
         error: action.error,
         info: null,
-        loading: true,
+        loading: false,
       };
 
     case DO_SIGNOUT:

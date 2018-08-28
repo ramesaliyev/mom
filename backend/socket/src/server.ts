@@ -9,7 +9,7 @@ dotenv.config();
 import User from './models/user';
 import * as cache from './services/cache';
 
-const log = (event, user: any = { id : 'anonymous' }) =>
+const log =   (event, user: any = { id : 'anonymous' }) =>
   console.log(`${event} #${user.id}`);
 
 export class SocketServer {
@@ -109,18 +109,15 @@ export class SocketServer {
   deauthenticate(socket: any): void {
     const user: User = socket.user;
 
-    socket.user = null;
-    socket.oldUser = user;
-    socket.leave(this.getUserPrivateRoom(user));
+    if (user) {
+      socket.user = null;
+      socket.oldUser = user;
+      socket.leave(this.getUserPrivateRoom(user));
+    }
+    
     socket.emit('deauthenticated');
 
     log('Deauthentication granted.', user);
-  }
-
-  closeConn(socket: any, reason: string, user: any = null) {
-    socket.disconnect(reason);
-    console.log(`Closing connection ${(user ? `of ${user.id}` : '')} (${reason})`);
-    return false;
   }
 
   getUserPrivateRoom(user: User) {
