@@ -1,12 +1,10 @@
-import { notify } from 'globals/notify';
+import { notifier } from 'globals/notify';
 
-const doNotify = (type, message) => {
-  notify(type, `[Socket] ${message}`);
-  console.log(type, `[Socket] ${message}`);
-}
-const nInfo = doNotify.bind(null, 'info');
-const nSuccess = doNotify.bind(null, 'success');
-const nError = doNotify.bind(null, 'error');
+const notify = notifier('Socket', 'wifi');
+
+const nInfo = notify.bind(null, 'info');
+const nSuccess = notify.bind(null, 'success');
+const nError = notify.bind(null, 'error');
 
 export default (socket) => {
   nInfo('Connecting...');

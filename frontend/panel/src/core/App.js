@@ -1,11 +1,9 @@
 import React, { Fragment } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify';
+import ButterToast from 'butter-toast';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 import 'typeface-roboto'
-import 'react-toastify/dist/ReactToastify.css';
 
 import { actionAppInitialized } from 'actions/app/init';
 import { getStore } from './store';
@@ -27,7 +25,10 @@ const App = props => (
             <Routes />
           </Layout>
         </Boundary>
-        <ToastContainer />
+        <ButterToast
+          trayPosition="bottom-right"
+          pauseOnHover={true}
+        />
       </Fragment>
     </BrowserRouter>
   </Provider>

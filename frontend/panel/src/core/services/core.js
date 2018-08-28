@@ -2,8 +2,10 @@ import * as axios from 'axios';
 
 import { getDefaultHeaders } from 'config';
 import { getStore } from 'core/store';
-import { notify } from 'globals/notify';
+import { notifier } from 'globals/notify';
 import { actionDoSignOut } from 'actions/user/signin';
+
+const notify = notifier('Api', 'database');
 
 const request = (method, url, data, options = {}) =>
   axios({

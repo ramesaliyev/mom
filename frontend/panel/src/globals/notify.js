@@ -1,14 +1,24 @@
-import { toast } from 'react-toastify';
+import React from 'react';
+import ButterToast, { CinnamonSugar } from 'butter-toast';
+import log from 'log-with-style';
 
-export const notify = (type, message) => {
-  const method = type === 'default' ? toast : toast[type];
+const typeThemeMap = {
+  success: 'green',
+  error: 'red',
+  info: 'blue'
+};
 
-  method(message, {
-    position: "bottom-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+export const notifier = (namespace, icon) => (type, message) => {
+  const theme = typeThemeMap[type];
+
+  log(`_[${namespace}:_[c="color: ${theme}; font-weight:bold;"]${type}[c]] ${message}`);
+
+  ButterToast.raise(CinnamonSugar.crunch({
+    toastTimeout: 6000,
+    dismissOnClick: true,
+    theme,
+    icon,
+    title: <span style={{ fontFamily: 'Roboto' }}>{message}</span>,
+    message: <span style={{ fontFamily: 'Roboto' }}>{namespace}</span>,
+  }))
 };
