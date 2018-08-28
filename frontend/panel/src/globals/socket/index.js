@@ -9,20 +9,59 @@ class Socket {
   endpoint = `${process.env.REACT_APP_SOCKET_ENDPOINT}/user`;
   socket = null;
   user = null;
+  connected = false;
+  authenticated = false;
 
   constructor() {
     this.destroy = this.destroy.bind(this);
   }
 
   connect(user) {
-    this.user = user;
     this.socket = io(this.endpoint, {
       forceNew: true,
-      query: { user: JSON.stringify(user) }
+    });
+
+    this.on('disconnect', (reason) => {
+      this.connected = false;  
     });
 
     this.on('reconnect', () => {
-      this.authenticated && this.login();  
+      this.authenticated && this.relogin();  
+    });
+
+    this.on('authenticated', () => {
+      this.authenticated = true;
+    });
+
+    this.on('auth-error', (reason) => {
+      getStore().dispatch(actionDoSignOut());
+      this.destroy();
+    });
+
+    this.on('deauthenticated', () => {
+      this.authenticated = false;
+    });
+
+    this.connected = true;
+
+    return this;
+  }
+
+  login(user) {
+    this.user = user;
+    
+    this.emit('authenticate', user);
+
+    return this;
+  }
+
+  relogin() {
+    this.user && this.login(this.user);
+  }
+
+  logout() {
+    this.emit('deauthenticate', null, () => {
+      this.destroy();
     });
 
     return this;
@@ -30,6 +69,7 @@ class Socket {
 
   trace() {
     tracer(this);
+
     return this;
   }
 
@@ -40,35 +80,14 @@ class Socket {
 
   on(event, handler) {
     this.socket.on(event, handler);
+    
+    return this;
   }
 
   emit(event, content, ack) {
-    this.socket.emit(event, {
-      user: this.user,
-      content
-    }, ack);
-  }
+    this.socket.emit(event, content, ack);
 
-  login() {
-    this.on('authenticated', () => {
-      this.authenticated = true;
-    });
-
-    this.on('auth-error', () => {
-      getStore().dispatch(actionDoSignOut());
-    });
-
-    this.emit('authenticate');
-  }
-
-  logoutNDestroy() {
-    this.on('deauthenticated', () => {
-      this.authenticated = false;
-    });
-
-    this.emit('deauthenticate', null, () => {
-      this.destroy();
-    });
+    return this;
   }
 }
 

@@ -19,7 +19,7 @@ function* watcher() {
     localStorage.clear();
 
     getSocket()
-      .logoutNDestroy()
+      .logout()
   });
 }
 

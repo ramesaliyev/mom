@@ -16,8 +16,8 @@ export default (socket) => {
 
   socket.on('connect', () => nSuccess('Connected.'));
   socket.on('reconnect', () => nSuccess('Reconnected.'));
-  socket.on('disconnect', () => nError('Disconnected.'));
+  socket.on('disconnect', (reason = 'no-reason') => nError(`Disconnected (${reason}).`));
   socket.on('authenticated', () => nSuccess('Authenticated.'));
   socket.on('deauthenticated', () => nSuccess('Deauthenticated.'));
-  socket.on('auth-error', (message) => nError(`AuthError (${message}).`));
+  socket.on('auth-error', (reason = 'no-reason') => nError(`AuthError (${reason}).`));
 }

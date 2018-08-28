@@ -6,12 +6,11 @@ import * as jwt from 'jsonwebtoken';
 
 dotenv.config();
 
-import Message from './models/message';
 import User from './models/user';
 import * as cache from './services/cache';
 
-const log = (event, user) => 
-  console.log(`${event} (UID:${user.id})`);
+const log = (event, user: any = { id : 'anonymous' }) =>
+  console.log(`${event} #${user.id}`);
 
 export class SocketServer {
   public static readonly PORT:number;
@@ -24,115 +23,127 @@ export class SocketServer {
   constructor(namespace = '/') {
     this.onConnect = this.onConnect.bind(this);
 
-    this.create(namespace);
-    this.registerSecurityMiddleware();
-    this.listen();
-
-    this.nsp.on('connection', this.onConnect);
-  }
-
-  create(namespace): void {
     this.app = express();
     this.port = process.env.PORT;
     this.server = createServer(this.app);
     this.io = socketIO(this.server);
     this.nsp = this.io.of(namespace);
-  }
 
-  listen(): void {
     this.server.listen(this.port, () => {
       console.log(`Running server on port ${this.port}`);
     });
+
+    this.nsp.on('connection', this.onConnect);
+
+    // this.nsp.use((socket, next) => {
+    //   if (!socket.user) {
+    //     //return this.closeConn(socket, 'no-user');
+    //   }
+
+    //   console.log('Middleware:', socket.user, socket.request)
+
+    //   next();
+    // });
   }
 
-  onConnect(socket: any) {
-    const user: User = this.getUserFromQuery(socket);
-
-    log('User connected.', user);
+  async onConnect(socket: any) {
+    log('An user connected.');
 
     socket.on('disconnect', () => {
-      log('User disconnected.', user);
+      log('User disconnected.', socket.user || socket.oldUser);
     });
 
-    socket.on('authenticate', (message: any) => {
-      this.authenticate(socket, message);
+    socket.on('authenticate', (userData: User) => {
+      this.authenticate(socket, userData);
     });
 
     socket.on('deauthenticate', (message: any, ack: any) => {
-      this.deauthenticate(socket, message);
+      this.deauthenticate(socket);
       ack && ack();
     });
   }
 
-  registerSecurityMiddleware(): void {
-    this.nsp.use((socket, next) => {
-      const user: User = this.getUserFromQuery(socket);
+  async authenticate(socket: any, userData: any): Promise<any> {
+    log('Authentication requested.', userData);
 
-      if (!user) {
-        socket.disconnect(true);
-        console.log('Connection attempt denied in middleware, no user.');
-        return false;
-      }
-
-      next();
-    });
-  }
-
-  async authenticate(socket: any, message: Message): Promise<any> {
-    const user: User = message.user;
-
-    log('Authentication requested.', user);
-
-    const reject = () => {
-      log('Authentication rejected.', user);
-      return socket.emit('auth-error', 'wrong-token');  
+    const reject = (reason: string) => {
+      log(`Authentication rejected. (${reason})`, userData);
+      socket.emit('auth-error', reason);
+      return false;
     };
 
-    const isJWTValid = await new Promise((resolve, reject) =>
+    const user: any = await new Promise((resolve, reject) =>
       jwt.verify(
-        user.accessToken,
+        userData.accessToken,
         process.env.JWT_SECRET_KEY,
         (err, decoded) => err ?
           resolve(false) : resolve(decoded)
       )
     );
 
-    if (!isJWTValid) {
-      return reject();
+    if (!user) {
+      return reject('wrong-token');
+    }
+
+    if (user.id !== userData.id) {
+      return reject('not-token-of-user');
     }
 
     const cachedAccessToken = await cache.get(
       `${process.env.USER_TOKEN_CACHE_PREFIX}${user.id}`
     );
 
-    if (cachedAccessToken !== user.accessToken) {
-      return reject();
+    if (cachedAccessToken !== userData.accessToken) {
+      return reject('old-token');
     }
 
+    socket.user = user;
     socket.join(this.getUserPrivateRoom(user));
     socket.emit('authenticated');
 
     log('Authentication granted.', user);
+
+    return true;
   }
 
-  deauthenticate(socket: any, message: Message): void {
-    const user: User = message.user;
+  deauthenticate(socket: any): void {
+    const user: User = socket.user;
 
+    socket.user = null;
+    socket.oldUser = user;
     socket.leave(this.getUserPrivateRoom(user));
     socket.emit('deauthenticated');
 
     log('Deauthentication granted.', user);
   }
 
-  getUserFromQuery(socket: any): User | null {
-    try {
-      return JSON.parse(socket.handshake.query.user);
-    } catch (e) {}
-
-    return null;
+  closeConn(socket: any, reason: string, user: any = null) {
+    socket.disconnect(reason);
+    console.log(`Closing connection ${(user ? `of ${user.id}` : '')} (${reason})`);
+    return false;
   }
 
   getUserPrivateRoom(user: User) {
     return `user-private-room-${user.id}`;
   }
 }
+
+// PROTECTED ON LISTENING
+
+    // DELET THIS
+    // socket.on('message', (message: Message) => {
+    //   log(`User send: ${message.content}`, message.user);
+
+    //   this.nsp
+    //     .in(this.getUserPrivateRoom(user))
+    //     .clients((error, clients) => {
+    //       if (error) {
+    //         //throw error;
+    //       };
+
+    //       console.log('All clients:', Object.keys(this.nsp.connected));
+    //       console.log('Room clients:', clients);
+    //       console.log('Client time to exp:', this.nsp.connected[clients[0]].handshake.query.tokenExp);
+    //     });
+    // });
+    // DELET THIS

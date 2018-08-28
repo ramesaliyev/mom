@@ -11,9 +11,9 @@ function* watcher() {
     });
 
     getSocket()
-      .connect(data)
-      .trace()
-      .login();
+      .connect()
+      .login(data)
+      .trace();
   });
 }
 
