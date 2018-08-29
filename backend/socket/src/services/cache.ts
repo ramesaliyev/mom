@@ -7,3 +7,7 @@ const client = redis.createClient({
 });
 
 export const get = promisify(client.get).bind(client);
+
+export const getUserFromCache = id => get(
+  `${process.env.USER_TOKEN_CACHE_PREFIX}${id}`
+);

@@ -26,4 +26,5 @@ export default (socket) => {
   socket.on('authenticated', () => nSuccess('Authenticated.'));
   socket.on('deauthenticated', () => nSuccess('Deauthenticated.'));
   socket.on('auth-error', (reason = 'no-reason') => nError(`AuthError (${reason}).`));
+  socket.on('notification', (notification) => nSuccess(`Notification: "${notification}".`));
 }

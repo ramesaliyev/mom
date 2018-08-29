@@ -3,6 +3,8 @@
     "allowJs": true, 
     "module": "commonjs", 
     "target": "ES2017",
+    "experimentalDecorators": true,
+    "allowJs": true,  
     "baseUrl": "./src",
     "rootDir": "./src",
     "outDir": "./dist"

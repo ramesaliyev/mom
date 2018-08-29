@@ -41,6 +41,10 @@ class Socket {
       this.authenticated = false;
     });
 
+    this.on('notification', (notification) => {
+      // do something
+    });
+
     this.connected = true;
 
     return this;
