@@ -3,9 +3,11 @@ import { JwtService } from '@nestjs/jwt';
 
 import { CacheService } from 'core/services/cache.service';
 import { UserService } from 'modules/user/user.service';
-import { UserRegisterDTO, UserSafeDTO } from 'modules/user/user.dto';
 import { User } from 'modules/user/user.entity';
+import { UserRegisterDTO, UserSafeDTO } from 'modules/user/user.dto';
 import { LoginDTO } from './auth.dto';
+
+const LOGIN_EXPIRES_IN_SECONDS = +process.env.LOGIN_EXPIRES_IN_SECONDS;
 
 @Injectable()
 export class AuthService {
@@ -28,30 +30,35 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
+    return await this.createLoginForUser(user);
+  }
+
+  async renewToken(userFromToken: UserSafeDTO) {
+    const user = await this.userService.findOneById(userFromToken.id);
+    return await this.createLoginForUser(user);
+  }
+
+  async createLoginForUser(user: User) {
     const userSafeResponse = user.safeResponse();
-    const accessToken = await this.generateToken(userSafeResponse);
+    const accessToken = await this.generateAndPersistToken(userSafeResponse);
 
     return {
       ...userSafeResponse,
-      accessToken
-    };
+      exp: this.getTokenExpireDateInMS(),
+      accessToken,
+    };   
   }
-
-  async generateToken(user: UserSafeDTO): Promise<string> {
+  
+  async generateAndPersistToken(user: UserSafeDTO): Promise<string> {
     const accessToken = await this.signToken(user);
 
     await this.cacheService.set(
       this.getCacheKey(user.id),
       accessToken,
-      { expire: process.env.LOGIN_EXPIRES_IN_SECONDS }
+      { expire: LOGIN_EXPIRES_IN_SECONDS }
     );
     
     return accessToken;
-  }
-
-  async renewToken(userFromToken: UserSafeDTO) {
-    const user = await this.userService.findOneById(userFromToken.id);
-    return await this.generateToken(user.safeResponse());
   }
 
   async logout(user: any) {
@@ -64,6 +71,10 @@ export class AuthService {
 
   getCacheKey(id: number): string {
     return `${process.env.USER_TOKEN_CACHE_PREFIX}${id}`;
+  }
+
+  getTokenExpireDateInMS() {
+    return Date.now() + (LOGIN_EXPIRES_IN_SECONDS * 1000);
   }
 
   async signToken(payload: any): Promise<string> {

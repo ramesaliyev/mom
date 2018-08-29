@@ -27,17 +27,13 @@ export class AuthController {
   @Get('logout')
   @UseGuards(AuthGuard)
   async logout(@User() user) {
-    return {
-      success: await this.authService.logout(user)
-    }
+    return { success: await this.authService.logout(user) }
   }
 
   @Get('renew-token')
   @UseGuards(AuthGuard)
   async renewToken(@User() user) {
-    return {
-      accessToken: await this.authService.renewToken(user)
-    }
+    return await this.authService.renewToken(user);
   }
   
   @Post('register')
