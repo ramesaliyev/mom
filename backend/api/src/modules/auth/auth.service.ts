@@ -3,7 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 
 import { CacheService } from 'core/services/cache.service';
 import { UserService } from 'modules/user/user.service';
-import { UserDTO } from 'modules/user/user.dto';
+import { UserRegisterDTO, UserSafeDTO } from 'modules/user/user.dto';
+import { User } from 'modules/user/user.entity';
 import { LoginDTO } from './auth.dto';
 
 @Injectable()
@@ -28,7 +29,16 @@ export class AuthService {
     }
 
     const userSafeResponse = user.safeResponse();
-    const accessToken = await this.createToken(userSafeResponse);
+    const accessToken = await this.generateToken(userSafeResponse);
+
+    return {
+      ...userSafeResponse,
+      accessToken
+    };
+  }
+
+  async generateToken(user: UserSafeDTO): Promise<string> {
+    const accessToken = await this.signToken(user);
 
     await this.cacheService.set(
       this.getCacheKey(user.id),
@@ -36,17 +46,19 @@ export class AuthService {
       { expire: process.env.LOGIN_EXPIRES_IN_SECONDS }
     );
     
-    return {
-      ...userSafeResponse,
-      accessToken
-    };
+    return accessToken;
+  }
+
+  async renewToken(userFromToken: UserSafeDTO) {
+    const user = await this.userService.findOneById(userFromToken.id);
+    return await this.generateToken(user.safeResponse());
   }
 
   async logout(user: any) {
     return await this.cacheService.remove(this.getCacheKey(user.id));
   }
 
-  async register(user: UserDTO) {
+  async register(user: UserRegisterDTO) {
     return await this.userService.create(user);
   }
 
@@ -54,7 +66,7 @@ export class AuthService {
     return `${process.env.USER_TOKEN_CACHE_PREFIX}${id}`;
   }
 
-  async createToken(payload: any): Promise<string> {
+  async signToken(payload: any): Promise<string> {
     return await this.jwtService.sign(payload);
   }
 

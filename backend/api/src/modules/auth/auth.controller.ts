@@ -2,7 +2,7 @@ import { Get, Post, Controller, UsePipes, ValidationPipe, Body, Query, UseGuards
 
 import { AuthGuard } from 'guards/auth.guard';
 import { User } from 'decorators/user.decorator';
-import { UserDTO } from 'modules/user/user.dto';
+import { UserRegisterDTO } from 'modules/user/user.dto';
 
 import { LoginDTO } from './auth.dto';
 import { AuthService } from './auth.service';
@@ -31,6 +31,14 @@ export class AuthController {
       success: await this.authService.logout(user)
     }
   }
+
+  @Get('renew-token')
+  @UseGuards(AuthGuard)
+  async renewToken(@User() user) {
+    return {
+      accessToken: await this.authService.renewToken(user)
+    }
+  }
   
   @Post('register')
   @UsePipes(
@@ -40,8 +48,9 @@ export class AuthController {
       whitelist: true,
     }),
   )
-  async register(@Body() userDTO: UserDTO) {
-    return await this.authService.register(userDTO);
+  async register(@Body() userRegisterDTO: UserRegisterDTO) {
+    await this.authService.register(userRegisterDTO);
+    return userRegisterDTO;
   }
 
   @Get('auth-test')

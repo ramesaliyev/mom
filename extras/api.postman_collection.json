@@ -138,6 +138,31 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "renew-token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:7070/renew-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"renew-token"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

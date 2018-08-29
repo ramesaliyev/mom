@@ -2,7 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { UserDTO } from './user.dto';
+import { UserRegisterDTO } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -19,12 +19,16 @@ export class UserService {
     return await this.findOneBy({ email });
   }
 
+  async findOneById(id: number): Promise<User> {
+    return await this.findOneBy({ id });
+  }
+
   async findAll(): Promise<User[]> {
     return await this.userRepository.find({ cache : true }); // caching to redis example
   }
 
-  async create(userDTO: UserDTO): Promise<UserDTO> {
-    const user = this.userRepository.create(userDTO);
+  async create(userRegisterDTO: UserRegisterDTO): Promise<UserRegisterDTO> {
+    const user = this.userRepository.create(userRegisterDTO);
     
     const isExist = await this.findOneByEmail(user.email);
 
@@ -34,6 +38,6 @@ export class UserService {
 
     await this.userRepository.save(user);
 
-    return userDTO;
+    return user.safeResponse();
   }
 }

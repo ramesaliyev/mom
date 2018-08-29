@@ -1,5 +1,5 @@
 import { Get, Post, Controller, UsePipes, ValidationPipe, Body } from '@nestjs/common';
-import { UserDTO } from './user.dto';
+import { UserRegisterDTO } from './user.dto';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 
@@ -21,7 +21,7 @@ export class UserController {
       whitelist: true,
     }),
   )
-  async create(@Body() userDTO: UserDTO) {
-    return await this.userService.create(userDTO);
+  async create(@Body() userRegisterDTO: UserRegisterDTO) {
+    return await this.userService.create(userRegisterDTO);
   }
 }

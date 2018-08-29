@@ -1,6 +1,6 @@
 import { IsDefined, IsEmail, IsString } from 'class-validator';
 
-export class UserDTO {
+export class UserRegisterDTO {
   @IsDefined()
   @IsString()
   readonly firstName: string;
@@ -16,4 +16,13 @@ export class UserDTO {
   @IsDefined()
   @IsString()
   readonly password: string;
+}
+
+export class UserSafeDTO {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
