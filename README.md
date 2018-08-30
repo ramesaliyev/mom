@@ -82,6 +82,8 @@ Some bash scripts to use when needed.
   - **hostname:** localhost:7070
 - Socket:
   - **hostname:** localhost:7080
+- External Math Service API:
+  - **hostname:** localhost:7090
 - PostgreSQL
   - **hostname:** localhost:7071
   - *others same as above*
