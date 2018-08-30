@@ -44,7 +44,7 @@ export class AuthService {
 
     return {
       ...userSafeResponse,
-      exp: this.getTokenExpireDateInMS(),
+      ...this.getTokenTimestampsInMS(),
       accessToken,
     };   
   }
@@ -73,8 +73,12 @@ export class AuthService {
     return `${process.env.USER_TOKEN_CACHE_PREFIX}${id}`;
   }
 
-  getTokenExpireDateInMS() {
-    return Date.now() + (LOGIN_EXPIRES_IN_SECONDS * 1000);
+  getTokenTimestampsInMS() {
+    const iat = Date.now()
+    return {
+      iat, 
+      exp: iat + (LOGIN_EXPIRES_IN_SECONDS * 1000),
+    }
   }
 
   async signToken(payload: any): Promise<string> {

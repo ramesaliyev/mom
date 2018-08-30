@@ -88,8 +88,7 @@ class Socket {
   }
 
   emit(event, content, ack) {
-    this.socket.emit(event, content, ack);
-
+    this.socket && this.socket.emit(event, content, ack);
     return this;
   }
 }

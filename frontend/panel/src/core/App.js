@@ -35,3 +35,4 @@ const App = props => (
 );
 
 export default App;
+window.getStore = getStore;

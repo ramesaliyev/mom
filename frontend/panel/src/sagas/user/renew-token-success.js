@@ -1,20 +1,18 @@
 import { takeLatest } from 'redux-saga/effects';
 
-import { DO_SIGNIN_SUCCESS } from 'symbols/user';
+import { RENEW_TOKEN_SUCCESS } from 'symbols/user';
 import { addDefaultHeaders } from 'config';
-import { getSocket } from 'globals/socket';
 import { scheduleRenewToken } from 'core/helpers/renew-token';  
+import { getSocket } from 'globals/socket';
 
 function* watcher() {
-  yield takeLatest(DO_SIGNIN_SUCCESS, function* ({ data }) { // eslint-disable-line
+  yield takeLatest(RENEW_TOKEN_SUCCESS, function* ({ data }) { // eslint-disable-line
     addDefaultHeaders({
       Authorization: data.accessToken
     });
 
     getSocket()
-      .connect()
-      .login(data)
-      .trace();
+      .login(data);
 
     scheduleRenewToken(data);
   });
