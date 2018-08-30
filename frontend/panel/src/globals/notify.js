@@ -11,10 +11,6 @@ const typeThemeMap = {
 export const notifier = (namespace, icon) => (type, message) => {
   const theme = typeThemeMap[type];
 
-  if (message instanceof Error) {
-    message = message.message;
-  }
-
   log(`_[${namespace}:_[c="color: ${theme}; font-weight:bold;"]${type}[c]] ${message}`);
 
   ButterToast.raise(CinnamonSugar.crunch({

@@ -63,7 +63,7 @@ axios.interceptors.response.use(
     const { status, data } = response;
     const { method, pathname } = parseConfig(config);
 
-    const message = data.message || data.error;
+    const message = data.error || (data.message ? (data.message.message || data.message) : data) ;
 
     notify(
       'error',
