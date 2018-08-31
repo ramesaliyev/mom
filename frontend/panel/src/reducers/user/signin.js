@@ -7,6 +7,7 @@ import {
   DO_SIGNIN_SUCCESS,
   DO_SIGNIN_FAILURE,
   DO_SIGNOUT,
+  RENEW_TOKEN_SUCCESS
 } from 'symbols/user';
 
 export default (
@@ -27,6 +28,7 @@ export default (
         loading: true,
       };
 
+    case RENEW_TOKEN_SUCCESS:
     case DO_SIGNIN_SUCCESS:
       return {
         ...state,

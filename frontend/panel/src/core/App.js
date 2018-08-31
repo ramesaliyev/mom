@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom'
 import ButterToast from 'butter-toast';
@@ -13,26 +13,33 @@ import Routes from './routes';
 
 import './App.css';
 
-getStore().dispatch(actionAppInitialized());
+const store = getStore();
 
-const App = props => (
-  <Provider store={getStore()}>
-    <BrowserRouter>
-      <Fragment>
-        <Boundary>
-          <CssBaseline />
-          <Layout>
-            <Routes />
-          </Layout>
-        </Boundary>
-        <ButterToast
-          trayPosition="bottom-right"
-          pauseOnHover={true}
-        />
-      </Fragment>
-    </BrowserRouter>
-  </Provider>
-);
+class App extends Component {
+  componentDidMount() {
+    setTimeout(() => store.dispatch(actionAppInitialized()));
+  }
+
+  render() {
+    return (
+      <Provider store={store}>
+        <BrowserRouter>
+          <Fragment>
+            <Boundary>
+              <CssBaseline />
+              <Layout>
+                <Routes />
+              </Layout>
+            </Boundary>
+            <ButterToast
+              trayPosition="bottom-right"
+              pauseOnHover={true}
+            />
+          </Fragment>
+        </BrowserRouter>
+      </Provider>
+    );
+  }
+}
 
 export default App;
-window.getStore = getStore;
