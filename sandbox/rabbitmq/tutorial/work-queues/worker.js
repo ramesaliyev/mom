@@ -1,4 +1,5 @@
 var amqp = require('amqplib/callback_api');
+require('dotenv').config();
 
 amqp.connect(process.env.MESSAGE_QUEUE, function(err, conn) {
   if (err) {

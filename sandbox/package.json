@@ -1,6 +1,7 @@
 {
   "name": "sandbox",
   "dependencies": {
-    "amqplib": "0.5.2"
+    "amqplib": "0.5.2",
+    "dotenv": "^6.0.0"
   }
 }

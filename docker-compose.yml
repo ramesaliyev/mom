@@ -75,7 +75,7 @@ services:
       - ./sandbox:/sandbox
     environment:
       - NODE_ENV=${NODE_ENV}
-      - MESSAGE_QUEUE=amqp://poc_rmq_user:poc_rmq_pass@rabbitmq
+      - MESSAGE_QUEUE=amqp://poc_rmq_user:poc_rmq_pass@rabbitmq:5672
     networks:
       - poc_network
     depends_on:

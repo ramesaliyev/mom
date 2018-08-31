@@ -3,7 +3,17 @@ import { SocketServer } from './server';
 
 dotenv.config();
 
+import { RabbitMQService } from './lib/rabbitmq';
+import { MQConfig } from 'config/mq';
+
+const service = new RabbitMQService(MQConfig);
+
 const socketServer = SocketServer.getSocket('/user');
+
+service.consume('socket', (content, resolve) => {
+  socketServer.emitToUser(content.owner.id, 'jobdone', content);
+  resolve();
+});
 
 let nCount = 0;
 const test = () => {

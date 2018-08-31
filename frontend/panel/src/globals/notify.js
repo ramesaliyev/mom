@@ -10,7 +10,7 @@ const typeThemeMap = {
 };
 
 export const notifier = (namespace, icon) => (type, message) => {
-  const theme = typeThemeMap[type];
+  const theme = typeThemeMap[type] || type;
   const time = moment().format('HH:mm:ss');
 
   log(`${time} _[${namespace}:_[c="color: ${theme}; font-weight:bold;"]${type}[c]] ${message}`);

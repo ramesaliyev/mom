@@ -5,6 +5,7 @@ const notify = notifier('Socket', 'wifi');
 const nInfo = notify.bind(null, 'info');
 const nSuccess = notify.bind(null, 'success');
 const nError = notify.bind(null, 'error');
+const nGrey = notify.bind(null, 'grey');
 
 export default (socket) => {
   nInfo('Connecting...');
@@ -27,4 +28,5 @@ export default (socket) => {
   socket.on('deauthenticated', () => nSuccess('Deauthenticated.'));
   socket.on('auth-error', (reason = 'no-reason') => nError(`AuthError (${reason}).`));
   socket.on('notification', (notification) => nSuccess(`Notification: "${notification}".`));
+  socket.on('jobdone', (job) => nGrey(`Job Done: "${job.type}#${job.id}".`));
 }
