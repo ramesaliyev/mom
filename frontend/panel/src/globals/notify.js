@@ -1,6 +1,7 @@
 import React from 'react';
 import ButterToast, { CinnamonSugar } from 'butter-toast';
 import log from 'log-with-style';
+import moment from 'moment';
 
 const typeThemeMap = {
   success: 'green',
@@ -10,8 +11,9 @@ const typeThemeMap = {
 
 export const notifier = (namespace, icon) => (type, message) => {
   const theme = typeThemeMap[type];
+  const time = moment().format('HH:mm:ss');
 
-  log(`_[${namespace}:_[c="color: ${theme}; font-weight:bold;"]${type}[c]] ${message}`);
+  log(`${time} _[${namespace}:_[c="color: ${theme}; font-weight:bold;"]${type}[c]] ${message}`);
 
   ButterToast.raise(CinnamonSugar.crunch({
     toastTimeout: 6000,
