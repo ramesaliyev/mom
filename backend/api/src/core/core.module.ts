@@ -8,6 +8,7 @@ import { CoreController } from './core.controller';
 
 import { UserModule } from 'modules/user/user.module';
 import { AuthModule } from 'modules/auth/auth.module';
+import { JobModule } from 'modules/job/job.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { AuthModule } from 'modules/auth/auth.module';
     ),
     TypeOrmModule.forRoot(DatabaseConfig as any),
     UserModule,
-    AuthModule
+    AuthModule,
+    JobModule,
   ],
   controllers: [CoreController],
 })

@@ -165,6 +165,43 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "job",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\": \"db\",\n\t\"details\": {\n\t\t\"falan\": \"filan\",\n\t\t\"fasa\": \"fiso\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7070/job",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"job"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

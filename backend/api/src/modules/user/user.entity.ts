@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
@@ -11,6 +12,8 @@ import {
 
 import * as credential from 'credential';
 import * as pick from 'lodash.pick';
+
+import { Job } from 'modules/job/job.entity';
 
 @Entity()
 export class User {
@@ -28,6 +31,13 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(
+    type => Job,
+    job => job.owner,
+    { cascade: true }
+  )
+  jobs: Job[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

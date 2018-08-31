@@ -17,9 +17,14 @@ import { AuthService } from './auth.service';
     }),
     UserModule
   ],
-  controllers: [AuthController],
+  controllers: [
+    AuthController
+  ],
   providers: [
     CacheService,
+    AuthService
+  ],
+  exports: [
     AuthService
   ],
 })
