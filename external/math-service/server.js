@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
       Welcome to Math Service!
 
       Endpoints:
-      - [GET] /factors/:num
+      - [GET] /factors/:nums
       - [GET] /add/:nums
       - [GET] /subtract/:nums
       - [GET] /multiply/:nums
@@ -21,8 +21,9 @@ app.get('/', (req, res) => {
   `);
 });
 
-app.get('/factors/:num', ({ params: { num } }, res) => {
-  res.send(facty.factorize(+num));
+app.get('/factors/:nums', ({ params: { nums } }, res) => {
+  nums = nums.split(',');
+  res.send(nums.map(num => facty.factorize(+num)));
 });
 
 app.get('/add/:nums', ({ params: { nums } }, res) => {
