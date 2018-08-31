@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { MQService } from 'core/services/mq.service';
+
 import { AuthModule } from 'modules/auth/auth.module';
 import { UserModule } from 'modules/user/user.module';
 
@@ -18,6 +20,7 @@ import { Job } from './job.entity';
     JobController
   ],
   providers: [
+    MQService,
     JobService
   ],
 })
