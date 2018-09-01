@@ -19,6 +19,7 @@
     "@types/jsonwebtoken": "^7.2.8",
     "@types/redis": "^2.8.6",
     "@types/socket.io": "^1.4.38",
+    "amqp-connection-manager": "2.1.0",
     "amqplib": "^0.5.2",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",

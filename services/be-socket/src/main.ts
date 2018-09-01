@@ -9,14 +9,23 @@ const service = new RabbitMQService(MQConfig);
 const socketServer = SocketServer.getSocket('/user');
 
 service.consume('socket', (content, resolve) => {
-  console.log(content.owner.id, 'jobdone', content);
-  socketServer.emitToUser(content.owner.id, 'jobdone', content);
+  const ownerId = content.owner.id;
+  console.log(`Job received, emitting to user #${ownerId}`);
+
+  socketServer.emitToUser(
+    ownerId,
+    'jobdone',
+    content
+  );
+  
   resolve();
+}).then(() => {
+  console.log('Consuming socket queue...');
 });
 
-let nCount = 0;
+let bCount = 0;
 const test = () => {
-  socketServer.emitToUser(1, 'notification', `Tokat ${++nCount}`);
+  socketServer.emitToUser(1, 'notification', `🔥 #${++bCount}`);
   setTimeout(test, Math.random() * 20000);
 }
 

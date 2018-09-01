@@ -1,34 +1,28 @@
 /**
- * SHARED MQ Service v0.4.0
+ * SHARED MQ Service v0.5.0
  */
 
-import * as amqplib from 'amqplib';
+import * as amqpConnManager from 'amqp-connection-manager';
 
 export class RabbitMQService {
-  constructor(
-    private readonly config
-  ) {}
+  private connection;
 
-  async conn() {
-    const { host, port, user, pass } = this.config;
-
-    return await amqplib.connect({
-      protocol: 'amqp',
-      hostname: host,
-      port: port,
-      username: user,
-      password: pass,
-      heartbeat: 30,
+  constructor({ host, port, user, pass }) {
+    this.connection = amqpConnManager.connect({
+      url: `amqp://${user}:${pass}@${host}:${port}`,
+      json: true,
+      connectionOptions: {
+        heartbeat: 30,
+      }
     });
-  }
 
-  async createConfirmChannel(): Promise<any> {
-    const conn = await this.conn();
-    return await conn.createConfirmChannel();
-  }
+    this.connection.on('connect', function() {
+      console.log('Connected to MQ!');
+    });
 
-  async assertQueue(channel: any, name: string, options: any = {}): Promise<any> {
-    return await channel.assertQueue(name, options);
+    this.connection.on('disconnect', function(params) {
+      console.log('Disconnected from MQ!', params.err.stack);
+    });
   }
 
   async queue(
@@ -37,20 +31,26 @@ export class RabbitMQService {
     options: any = { persist: true }, 
     queueOptions: any = { durable: true }
   ): Promise<any> {
-    const channel = await this.createConfirmChannel();
-
     if (options.persist) {
       queueOptions.durable = true;
     }
 
-    await this.assertQueue(channel, name, queueOptions);
+    const channelWrapper = this.connection.createChannel({
+      json: true,
+      setup: channel => {
+        return channel.assertQueue(name, queueOptions);
+      }
+    });  
 
-    return new Promise((resolve, reject) => {
-      channel.sendToQueue(name, new Buffer(JSON.stringify(payload)), options, err => {
-        channel.close();
-        return err ? reject(err) : resolve({ ack: true });
-      });  
-    });
+    return channelWrapper.sendToQueue(name, payload)
+      .then(() => {
+        console.log(`A message sent to ${name} queue.`);
+        channelWrapper.close();
+      }, err => {
+        console.log(`A message rejected from ${name} queue.`);
+        channelWrapper.close();
+        return Promise.reject(err);
+      });
   }
 
   async consume(
@@ -60,15 +60,7 @@ export class RabbitMQService {
     queueOptions: any = { durable: true },
     channelOptions: any = { prefetch: 1 },
   ): Promise<any> {
-    const channel = await this.createConfirmChannel();
-
-    if (channelOptions.prefetch) {
-      channel.prefetch(channelOptions.prefetch);
-    }
-
-    await this.assertQueue(channel, name, queueOptions);
-
-    const middleConsumer = msg => {
+    const middleman = (channel, consumer) => msg => {
       let content = msg.content.toString();
 
       try {
@@ -89,6 +81,18 @@ export class RabbitMQService {
       );
     }
 
-    channel.consume(name, middleConsumer, options);
+    var channelWrapper = this.connection.createChannel({
+      setup: channel => {
+        const steps = [];
+
+        steps.push(channel.assertQueue(name, queueOptions));
+        channelOptions.prefetch && steps.push(channel.prefetch(channelOptions.prefetch));
+        steps.push(channel.consume(name, middleman(channel, consumer), options));
+
+        return Promise.all(steps);
+      }
+    });
+
+    return channelWrapper.waitForConnect();
   }
 }
