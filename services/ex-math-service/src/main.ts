@@ -42,7 +42,7 @@ app.get('/divide/:nums', ({ params: { nums } }, res) => {
   res.send(reduceParam(rest.join(','), (a, b) => a / b, first));
 });
 
-app.listen(process.env.EXMATHSERVICE_PORT, () =>
+app.listen(+process.env.EXMATHSERVICE_PORT, () =>
   console.log(`MathService listening on port ${process.env.EXMATHSERVICE_PORT}!`)
 );
 

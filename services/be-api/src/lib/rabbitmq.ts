@@ -1,14 +1,18 @@
 /**
- * SHARED MQ Service v0.3.0
+ * SHARED MQ Service v0.4.0
  */
 
 import * as amqplib from 'amqplib';
 
 export class RabbitMQService {
-  private readonly connection
+  constructor(
+    private readonly config
+  ) {}
 
-  constructor({ host, port, user, pass }) {
-    this.connection = amqplib.connect({
+  async conn() {
+    const { host, port, user, pass } = this.config;
+
+    return await amqplib.connect({
       protocol: 'amqp',
       hostname: host,
       port: port,
@@ -16,10 +20,6 @@ export class RabbitMQService {
       password: pass,
       heartbeat: 30,
     });
-  }
-
-  async conn() {
-    return await this.connection;
   }
 
   async createConfirmChannel(): Promise<any> {

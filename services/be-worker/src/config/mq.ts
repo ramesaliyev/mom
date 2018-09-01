@@ -7,7 +7,7 @@ const {
 
 export const MQConfig = {
   host: MQ_HOSTNAME,
-  port: MQ_PORT,
+  port: +MQ_PORT,
   user: MQ_USERNAME,
   pass: MQ_PASSWORD,
 };

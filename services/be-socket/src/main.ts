@@ -9,6 +9,7 @@ const service = new RabbitMQService(MQConfig);
 const socketServer = SocketServer.getSocket('/user');
 
 service.consume('socket', (content, resolve) => {
+  console.log(content.owner.id, 'jobdone', content);
   socketServer.emitToUser(content.owner.id, 'jobdone', content);
   resolve();
 });

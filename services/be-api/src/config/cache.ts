@@ -5,5 +5,5 @@ const {
 
 export const CacheConfig = {
   host: REDIS_HOSTNAME,
-  port: REDIS_PORT
+  port: +REDIS_PORT
 };
