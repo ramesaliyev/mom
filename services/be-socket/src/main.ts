@@ -1,8 +1,6 @@
-import * as dotenv from 'dotenv';
+import "./lib/configure-env";
+
 import { SocketServer } from './server';
-
-dotenv.config();
-
 import { RabbitMQService } from './lib/rabbitmq';
 import { MQConfig } from 'config/mq';
 

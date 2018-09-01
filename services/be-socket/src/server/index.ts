@@ -1,9 +1,6 @@
-import * as dotenv from 'dotenv';
 import { createServer, Server } from 'http';
 import * as express from 'express';
 import * as socketIO from 'socket.io';
-
-dotenv.config();
 
 import User from './models/user';
 import { getUserFromCache } from '../services/cache';
@@ -14,7 +11,6 @@ const log = (event, user: any = { id : 'anonymous' }) =>
   console.log(`${event} #${user.id}`);
 
 export class SocketServer {
-  public static readonly PORT:number;
   private app: express.Application;
   private server: Server;
   private io: SocketIO.Server;
@@ -37,7 +33,7 @@ export class SocketServer {
     this.onConnect = this.onConnect.bind(this);
 
     this.app = express();
-    this.port = process.env.PORT;
+    this.port = process.env.SOCKET_PORT;
     this.server = createServer(this.app);
     this.io = socketIO(this.server);
     this.nsp = this.io.of(namespace);

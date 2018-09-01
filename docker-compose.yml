@@ -100,6 +100,23 @@ services:
       - rabbitmq_server
       - redis_server
 
+  socket:
+    container_name: poc_socket
+    restart: always
+    build:
+      context: ./services/be-socket
+    env_file:
+      - ./config/env/.common.env
+      - ./config/env/.docker.env
+    ports:
+      - 7080:7080
+    networks:
+      - poc_network
+    depends_on:
+      - postgresql_server
+      - rabbitmq_server
+      - redis_server
+
 volumes:
   poc_volume_postgresql:
   poc_volume_rabbitmq:
