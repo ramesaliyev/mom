@@ -163,6 +163,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\" : \"rames\",\n\t\"lastName\" : \"aliyev\",\n\t\"email\" : \"ramesaliyev@gmail.com\",\n\t\"password\" : \"12345\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7070/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7070",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
