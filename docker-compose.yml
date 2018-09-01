@@ -113,9 +113,20 @@ services:
     networks:
       - poc_network
     depends_on:
-      - postgresql_server
-      - rabbitmq_server
-      - redis_server
+      - api
+
+  worker:
+    container_name: poc_worker
+    restart: always
+    build:
+      context: ./services/be-worker
+    env_file:
+      - ./config/env/.common.env
+      - ./config/env/.docker.env
+    networks:
+      - poc_network
+    depends_on:
+      - socket
 
 volumes:
   poc_volume_postgresql:
