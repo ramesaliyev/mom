@@ -128,6 +128,19 @@ services:
     depends_on:
       - socket
 
+  exmathservice:
+    container_name: poc_exmathservice
+    restart: always
+    build:
+      context: ./services/ex-math-service
+    env_file:
+      - ./config/env/.common.env
+      - ./config/env/.docker.env
+    ports:
+      - 7090:7090
+    networks:
+      - poc_network
+
 volumes:
   poc_volume_postgresql:
   poc_volume_rabbitmq:

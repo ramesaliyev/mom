@@ -1,0 +1,1 @@
+This files are same and shared across codebase. Here we're copying this files since this is a poc and we keep everything in same repo. But for a production like environment these files can shared via npm modules or git submodules etc.

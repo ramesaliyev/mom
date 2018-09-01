@@ -9,7 +9,6 @@
     "outDir": "./dist"
   },
   "include": [
-    "./src/*.ts",
-    "./src/model/*.ts"
+    "./src/*.ts"
   ]
 }

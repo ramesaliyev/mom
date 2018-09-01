@@ -1,8 +1,7 @@
+import './lib/configure-env';
+
 const express = require('express');
 const facty = require('facty');
-const dotenv = require('dotenv');
-
-dotenv.config();
 const app = express();
 
 app.get('/', (req, res) => {
@@ -43,8 +42,8 @@ app.get('/divide/:nums', ({ params: { nums } }, res) => {
   res.send(reduceParam(rest.join(','), (a, b) => a / b, first));
 });
 
-app.listen(process.env.PORT, () =>
-  console.log(`MathService listening on port ${process.env.PORT}!`)
+app.listen(process.env.EXMATHSERVICE_PORT, () =>
+  console.log(`MathService listening on port ${process.env.EXMATHSERVICE_PORT}!`)
 );
 
 // Utils
