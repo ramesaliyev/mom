@@ -113,7 +113,9 @@ services:
     networks:
       - poc_network
     depends_on:
-      - api
+      - postgresql_server
+      - rabbitmq_server
+      - redis_server
 
   worker:
     container_name: poc_worker
@@ -126,7 +128,22 @@ services:
     networks:
       - poc_network
     depends_on:
-      - socket
+      - postgresql_server
+      - rabbitmq_server
+      - redis_server
+
+  panel:
+    container_name: poc_panel
+    restart: always
+    build:
+      context: ./services/fe-panel
+    env_file:
+      - ./config/env/.common.env
+      - ./config/env/.docker.env
+    ports:
+      - 9090:9090
+    networks:
+      - poc_network
 
   exmathservice:
     container_name: poc_exmathservice

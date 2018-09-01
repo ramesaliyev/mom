@@ -25,10 +25,8 @@
     "typeface-roboto": "0.0.54"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
+    "start": "NODE_ENV=development NODE_PATH=src/ react-scripts start",
+    "build": "NODE_ENV=production NODE_PATH=src/ react-scripts build",
     "serve": "better-npm-run serve",
     "start:prod": "npm run build && npm run serve"
   },
