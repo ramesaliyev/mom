@@ -1,8 +1,4 @@
-/**
- * Get Environment Configs
- */
-import { config as getEnvironmentConfigs } from 'dotenv';
-getEnvironmentConfigs();
+import "./lib/configure-env";
 
 /**
  * & Stuff
@@ -15,7 +11,7 @@ export async function bootstrap() {
 
   app.enableCors();
 
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.API_PORT);
 }
 
 bootstrap();

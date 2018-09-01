@@ -9,7 +9,7 @@
 			"name": "user",
 			"item": [
 				{
-					"name": "user.list",
+					"name": "list",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -32,7 +32,7 @@
 					"response": []
 				},
 				{
-					"name": "user.create",
+					"name": "create",
 					"request": {
 						"method": "POST",
 						"header": [

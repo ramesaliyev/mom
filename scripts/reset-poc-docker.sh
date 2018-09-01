@@ -12,7 +12,7 @@
 
 $(docker stop poc_postgresql_server)
 $(docker stop poc_postgresql_adminer)
-$(docker stop poc_rabbitmq)
+$(docker stop poc_rabbitmq_server)
 $(docker stop poc_redis_server)
 $(docker stop poc_redis_commander)
 $(docker stop poc_sandbox)
@@ -26,8 +26,7 @@ $(docker rm poc_redis_commander)
 $(docker rm poc_sandbox)
 $(docker rm poc_panel)
 
-$(docker rmi mom-based-architecture-poc_sandbox)
-$(docker rmi mom-based-architecture-poc_panel)
+$(docker rmi mom-based-architecture-poc_api)
 
 $(docker volume rm mom-based-architecture-poc_poc_volume_postgresql)
 $(docker volume rm mom-based-architecture-poc_poc_volume_rabbitmq)

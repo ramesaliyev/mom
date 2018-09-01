@@ -27,8 +27,8 @@ services:
     depends_on:
       - postgresql_server
 
-  rabbitmq:
-    container_name: poc_rabbitmq
+  rabbitmq_server:
+    container_name: poc_rabbitmq_server
     image: rabbitmq:3.7.7-management
     restart: always
     environment:
@@ -80,7 +80,24 @@ services:
       - poc_network
     depends_on:
       - postgresql_server
-      - rabbitmq
+      - rabbitmq_server
+      - redis_server
+
+  api:
+    container_name: poc_api
+    restart: always
+    build:
+      context: ./services/be-api
+    env_file:
+      - ./config/env/.common.env
+      - ./config/env/.docker.env
+    ports:
+      - 7070:7070
+    networks:
+      - poc_network
+    depends_on:
+      - postgresql_server
+      - rabbitmq_server
       - redis_server
 
 volumes:
