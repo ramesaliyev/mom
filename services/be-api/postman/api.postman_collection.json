@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c839e1f9-54c0-41d2-bc45-49ef517287e5",
+		"_postman_id": "d573d160-7edd-44cc-8e99-b9a3cacc226a",
 		"name": "MOMPOC",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -13,7 +13,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "http://localhost:7070/user",
 							"protocol": "http",
@@ -63,6 +66,18 @@
 			"item": [
 				{
 					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c2391880-7eac-4842-983a-0f7845768a03",
+								"type": "text/javascript",
+								"exec": [
+									"pm.environment.set(\"Authorization\", pm.response.json().accessToken);"
+								]
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -99,7 +114,10 @@
 								"value": "{{Authorization}}"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "http://localhost:7070/auth-test",
 							"protocol": "http",
@@ -124,7 +142,10 @@
 								"value": "{{Authorization}}"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "http://localhost:7070/logout",
 							"protocol": "http",
@@ -149,7 +170,10 @@
 								"value": "{{Authorization}}"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "http://localhost:7070/renew-token",
 							"protocol": "http",
