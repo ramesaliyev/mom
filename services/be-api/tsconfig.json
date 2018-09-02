@@ -11,8 +11,9 @@
     "target": "es2017",
     "sourceMap": true,
     "allowJs": true,
-    "outDir": "./dist",
     "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "lib": [
       "dom",
       "es2016",
@@ -21,7 +22,7 @@
     ]
   },
   "include": [
-    "src/**/*"
+    "src/main.ts"
   ],
   "exclude": [
     "node_modules",
