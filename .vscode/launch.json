@@ -1,13 +1,54 @@
 {
   "version": "0.2.0",
-  "configurations": [{
-    "name": "Frontend/Panel Chrome",
-    "type": "chrome",
-    "request": "launch",
-    "url": "http://localhost:9090",
-    "webRoot": "${workspaceRoot}/frontend/panel/src",
-    "sourceMapPathOverrides": {
-      "webpack:///frontend/panel/src*": "${webRoot}/*"
+  "configurations": [
+    {
+      "name": "Be/Api",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/services/be-api/node_modules/.bin/ts-node",
+      "cwd": "${workspaceRoot}/services/be-api/",
+      "protocol": "inspector",
+      "args": [
+        "-r",
+        "tsconfig-paths/register",
+        "${workspaceRoot}/services/be-api/src/main.ts"
+      ]
+    },
+    {
+      "name": "Be/Socket",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/services/be-socket/node_modules/.bin/ts-node",
+      "cwd": "${workspaceRoot}/services/be-socket/",
+      "protocol": "inspector",
+      "args": [
+        "-r",
+        "tsconfig-paths/register",
+        "${workspaceRoot}/services/be-socket/src/main.ts"
+      ]
+    },
+    {
+      "name": "Be/Worker",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/services/be-worker/node_modules/.bin/ts-node",
+      "cwd": "${workspaceRoot}/services/be-worker/",
+      "protocol": "inspector",
+      "args": [
+        "-r",
+        "tsconfig-paths/register",
+        "${workspaceRoot}/services/be-worker/src/main.ts"
+      ]
+    },
+    {
+      "name": "Fe/Panel",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:9090",
+      "webRoot": "${workspaceRoot}/services/fe-panel/src",
+      "sourceMapPathOverrides": {
+        "webpack:///services/fe-panel/src/*": "${webRoot}/*"
+      }
     }
-  }]
+  ]
 }
