@@ -1,8 +1,7 @@
 #!/usr/bin/env node
+const { connect } = require('../utils');
 
-var amqp = require('amqplib/callback_api');
-
-amqp.connect(process.env.MESSAGE_QUEUE, function(err, conn) {
+connect((err, conn) => {
   if (err) {
     return console.log(err);
   }

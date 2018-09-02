@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var amqp = require('amqplib/callback_api');
+const { connect } = require('../utils');
 
 var args = process.argv.slice(2);
 
@@ -8,7 +8,7 @@ if (args.length == 0) {
   process.exit(1);
 }
 
-amqp.connect(process.env.MESSAGE_QUEUE, function(err, conn) {
+connect((err, conn) => {
   if (err) {
     return console.log(err);
   }

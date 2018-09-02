@@ -73,9 +73,9 @@ services:
     working_dir: /sandbox
     volumes:
       - ./sandbox:/sandbox
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - MESSAGE_QUEUE=amqp://poc_rmq_user:poc_rmq_pass@rabbitmq:5672
+    env_file:
+      - ./config/env/.common.env
+      - ./config/env/.docker.env
     networks:
       - poc_network
     depends_on:
