@@ -1,5 +1,5 @@
 /**
- * SHARED MQ Service v0.5.0
+ * SHARED RabbitMQ Service v0.5.1
  */
 
 import * as amqpConnManager from 'amqp-connection-manager';
