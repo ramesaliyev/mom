@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { connect } = require('../utils');
+const { connect } = require('../../utils');
 
 var args = process.argv.slice(2);
 

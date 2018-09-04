@@ -27,8 +27,9 @@ services:
 
   rabbitmq_server:
     container_name: poc_rabbitmq_server
-    image: rabbitmq:3.7.7-management
     restart: always
+    build:
+      context: ./services/ds-rabbitmq
     env_file:
       - ./config/env/.common.env
     ports:
