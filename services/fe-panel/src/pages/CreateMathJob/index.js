@@ -46,7 +46,7 @@ class CreateMathJob extends Component {
 
   createOperation() {
     return {
-      method: 'factor',
+      method: 'factors',
       numbers: ''
     };
   }
@@ -158,7 +158,7 @@ const MathOperation = ({ classes, details, onMethodChange, onNumbersChange }) =>
             onChange={e => onMethodChange(e.target.value)}
             input={<Input name="method" id="method" />}
           >
-            <MenuItem value={'factor'}>Factor</MenuItem>
+            <MenuItem value={'factors'}>Factors</MenuItem>
             <MenuItem value={'add'}>Add</MenuItem>
             <MenuItem value={'subtract'}>Subtract</MenuItem>
             <MenuItem value={'multiply'}>Multiply</MenuItem>

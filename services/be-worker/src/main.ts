@@ -3,17 +3,19 @@ import './lib/configure-env';
 import { RabbitMQService } from './lib/rabbitmq';
 import { MQConfig } from 'config/mq';
 
-import JobMathWorker from './workers/job_math';
+const QUEUE_NAME = 'job';
 
-const queue = 'job:math';
-
-const Worker = {
-  'job:math': JobMathWorker
-}[queue];
+import workers from './workers';
 
 const service = new RabbitMQService(MQConfig);
-const worker = new Worker(service);
 
-service.consume(queue, worker.consumer.bind(worker));
+service.consume(QUEUE_NAME, (content, resolve, reject) => {
+  const { type } = content;
+  const worker = new workers[type](service);
 
-console.log('Working...');
+  try {
+    worker.consume(content, resolve, reject);
+  } catch (e) {
+    reject();
+  }
+});

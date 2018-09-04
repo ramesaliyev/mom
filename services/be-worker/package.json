@@ -19,6 +19,8 @@
     "amqp-connection-manager": "2.1.0",
     "amqplib": "0.5.2",
     "dotenv": "6.0.0",
-    "redis": "2.8.0"
+    "redis": "2.8.0",
+    "request": "2.88.0",
+    "request-promise-native": "1.0.5"
   }
 }

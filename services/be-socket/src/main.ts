@@ -12,11 +12,7 @@ service.consume('socket', (content, resolve) => {
   const ownerId = content.owner.id;
   console.log(`Job received, emitting to user #${ownerId}`);
 
-  socketServer.emitToUser(
-    ownerId,
-    'jobdone',
-    content
-  );
+  socketServer.emitToUser(ownerId, 'job:done', content);
   
   resolve();
 }).then(() => {

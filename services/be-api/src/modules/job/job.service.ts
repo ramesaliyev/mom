@@ -33,7 +33,7 @@ export class JobService {
     const record = await this.jobRepository.save(JobRecord);
     record.owner = user.safeResponse();
 
-    await this.mqService.queue(`job:${type}`, JobRecord);
+    await this.mqService.queue(`job`, JobRecord);
 
     return record;
   }

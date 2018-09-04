@@ -8,4 +8,12 @@ export default class BaseWorker {
   async notify(payload) {
     return await this.queue('socket', payload);
   }
+
+  async next(payload: any) {
+    return await this.queue('job', payload);
+  }
+
+  async end(payload: any) {
+    return await this.notify(payload);
+  }
 }

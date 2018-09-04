@@ -28,5 +28,5 @@ export default (socket) => {
   socket.on('deauthenticated', () => nSuccess('Deauthenticated.'));
   socket.on('auth-error', (reason = 'no-reason') => nError(`AuthError (${reason}).`));
   socket.on('notification', (notification) => nSuccess(`Notification: "${notification}".`));
-  socket.on('jobdone', (job) => nGrey(`Job Done: "${job.type}#${job.id}".`));
+  socket.on('job:done', (job) => nGrey(`Job Done: "${job.type}#${job.id}".`));
 }

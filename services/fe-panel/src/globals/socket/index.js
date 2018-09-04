@@ -45,6 +45,11 @@ class Socket {
       // do something
     });
 
+    this.on('job:done', (content) => {
+      // do something
+      console.log('Job Done', content);
+    });
+
     this.connected = true;
 
     return this;
