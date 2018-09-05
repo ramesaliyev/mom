@@ -1,5 +1,5 @@
 /**
- * SHARED RabbitMQ Service v0.5.1
+ * SHARED RabbitMQ Service v0.6.0
  */
 
 import * as amqpConnManager from 'amqp-connection-manager';
@@ -74,9 +74,9 @@ export class RabbitMQService {
           console.log(`Job #${content.id} is done.`);
           channel.ack(msg);
         },
-        () => {
-          console.log(`Job #${content.id} is errored, will requeue.`);
-          channel.nack(msg, false, true);
+        (requeue = true) => {
+          console.log(`Job #${content.id} is errored, requeue=${requeue}.`);
+          channel.nack(msg, false, requeue);
         }
       );
     }
