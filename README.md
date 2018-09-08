@@ -36,7 +36,10 @@ To install and run application you only need to have installed and running [dock
     git clone git@github.com:ramesaliyev/mom-based-architecture-poc.git
 
 #### Start Everything
-    docker-compose up
+    docker-compose up --build
+
+#### Start Only Data Services
+    docker-compose up postgresql_server postgresql_adminer rabbitmq_server redis_server redis_commander
 
 **Starting everything will take some time**, so be patient. When everything has started you can;
   - Navigate to admin panel at [localhost:9090](http://localhost:9090/)

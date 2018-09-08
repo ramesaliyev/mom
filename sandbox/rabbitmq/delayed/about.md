@@ -1,1 +1,3 @@
 https://gist.github.com/mfressdorf/f46fdf266f35d8c525aea16719f837ac
+
+plugin: rabbitmq_delayed_message_exchange

@@ -18,11 +18,12 @@ export default class MathWorker extends BaseWorker {
       const result = await req(`http://${host}:${port}/${method}/${numbers}`);
       results.push(JSON.parse(result));
     } catch (e) {
-      reject();
+      return reject();
     }
 
     if (state.length) {
       this.next(content);
+      // this.nextDelayed(1000, content);
     } else {
       delete content.state;
       this.end(content);
