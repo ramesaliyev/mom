@@ -20,6 +20,16 @@ app.get('/', (req, res) => {
   `);
 });
 
+app.use(function (req, res, next) {
+  console.log(`Request "${req.url}"`);
+  next();
+});
+
+app.use(function (err, req, res, next) {
+  console.error('Err!',  err.stack);
+  res.status(500).send('Internal Server Error!')
+});
+
 app.get('/factors/:nums', ({ params: { nums } }, res) => {
   nums = nums.split(',');
   res.send(nums.map(num => facty.factorize(+num)));
