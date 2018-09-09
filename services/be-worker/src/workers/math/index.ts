@@ -5,7 +5,7 @@ import * as req from 'request-promise-native';
 export default class MathWorker extends BaseWorker {
   async consume(content, resolve, reject) {
     const { host, port } = ServicesConfig.math;
-    
+
     if (!content.results) {
       content.results = [];
       content.state = [...content.details];
@@ -15,15 +15,17 @@ export default class MathWorker extends BaseWorker {
     const { method, numbers } = state.shift();
     
     try {
+      console.log('Request to mathservice!');
       const result = await req(`http://${host}:${port}/${method}/${numbers}`);
       results.push(JSON.parse(result));
+      console.log('Response received from mathservice!');
     } catch (e) {
       return reject();
     }
 
     if (state.length) {
       this.next(content);
-      // this.nextDelayed(1000, content);
+      // this.nextDelayed(3000, content);
     } else {
       delete content.state;
       this.end(content);
