@@ -9,6 +9,12 @@ export default (theme) => ({
     position: 'relative',
     display: 'flex',
   },
+  flex: {
+    flexGrow: 1,
+  },
+  link: {
+    color: 'inherit',
+  },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -27,6 +33,9 @@ export default (theme) => ({
   menuButtonWrapper: {
     marginLeft: 12,
     marginRight: 36,
+  },
+  codeButtonWrapper: {
+    marginRight: 2,
   },
   hide: {
     display: 'none',
