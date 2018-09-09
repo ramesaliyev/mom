@@ -1,5 +1,5 @@
 /**
- * SHARED RabbitMQ Service v0.9.0
+ * SHARED RabbitMQ Service v0.10.3
  */
 
 import * as amqpConnManager from 'amqp-connection-manager';
@@ -45,6 +45,11 @@ export class RabbitMQService {
       default: {
         durable: true,
         maxPriority: 10,
+      },
+      rpc: {
+        durable: true,
+        exclusive: true,
+        autoDelete: true,
       }
     },
 
@@ -269,7 +274,7 @@ export class RabbitMQService {
   /**
    *  Send to Queue.
    */
-  public sendToQueue(queue, payload, options = {}, confirm) {
+  public sendToQueue(queue, payload, options = {}, confirm = undefined) {
     const channel = this.getChannel(ch =>
       this.assertStandardQueue(ch, queue)
     );
@@ -282,6 +287,46 @@ export class RabbitMQService {
     return channel.sendToQueue(queue, payload, mOptions, (err, ok) => {
       confirm && confirm(err, ok);
       channel.close();
+    });
+  }
+
+  /**
+   * 
+   */
+  public rpc(queue, payload, options = {}) {
+    return new Promise((resolve, reject) => {
+      this.getChannel(async channel => {
+        let replyQueue;
+
+        try {
+          const assertedQueue = await channel.assertQueue(null, {
+            ...this.defaults.queue.rpc,
+            ...options
+          });
+          replyQueue = assertedQueue.queue;
+        } catch (err) {
+          console.log('Error while creating rpc queue.', queue, err);
+          return reject(err);
+        }
+
+        const correlationId = uuid();
+
+        channel.consume(replyQueue, msg => {
+          const content = this.parseContent(msg);
+          const { properties: props } = msg;
+
+          if (props.correlationId === correlationId) {
+            channel.close();
+            resolve(content);
+          }
+        }, { noAck: true });
+
+        this.sendToQueue(queue, payload, {
+          correlationId,
+          priority: 10,
+          replyTo: replyQueue
+        });
+      });
     });
   }
 
@@ -327,18 +372,44 @@ export class RabbitMQService {
    */
   protected consumerMiddleware(ch, consumer) {
     return msg => {
-      let content = msg.content.toString();
-
-      try {
-        content = JSON.parse(content);
-      } catch (e) {}
-
+      const content = this.parseContent(msg);
       consumer(
         content,
-        () => ch.ack(msg),
-        (requeue = true) => ch.nack(msg, false, requeue)
+        result => {
+          const { properties: {
+            replyTo, correlationId
+          } } = msg;
+
+          if (replyTo) {
+            const replyCh = this.getChannel();
+            
+            replyCh.sendToQueue(
+              replyTo,
+              result,
+              { correlationId },
+              () => {
+                replyCh.close();
+              }
+            );
+          }
+
+          ch.ack(msg);
+        },
+        (requeue = true) => {
+          ch.nack(msg, false, requeue)
+        }
       );
     };
+  }
+
+  protected parseContent(msg) {
+    let content = msg.content.toString();
+
+    try {
+      content = JSON.parse(content);
+    } catch (e) {}
+
+    return content;
   }
 }
 
@@ -374,9 +445,9 @@ export class RabbitMQServiceWLogger extends RabbitMQService {
       ch, (content, resolve, reject) => {
         console.log("-----------------------------");
         console.log(`#${content.id} received: `, content);
-        consumer(content, () => {
+        consumer(content, result => {
           console.log(`#${content.id} done.`);
-          resolve();
+          resolve(result);
         }, requeue => {
           console.log(`#${content.id} rejected${requeue ? ' will requeue' : ''}.`);
           reject(requeue);
