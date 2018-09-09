@@ -1,4 +1,8 @@
 import {
+  APP_INITIALIZED
+} from 'symbols/app';
+
+import {
   CREATE_JOB,
   CREATE_JOB_SUCCESS,
   CREATE_JOB_FAILURE,
@@ -9,6 +13,12 @@ export default (
   action,
 ) => {
   switch (action.type) {
+    case APP_INITIALIZED:
+      return {
+        ...state,
+        loading: false
+      }
+
     case CREATE_JOB:
       return {
         error: null,
