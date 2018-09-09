@@ -11,8 +11,8 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts"
   },
   "dependencies": {
-    "@nestjs/common": "5.0.0",
-    "@nestjs/core": "5.0.0",
+    "@nestjs/common": "5.3.6",
+    "@nestjs/core": "5.3.6",
     "@nestjs/jwt": "0.1.1",
     "@nestjs/typeorm": "5.2.0",
     "amqp-connection-manager": "2.1.0",
@@ -29,7 +29,8 @@
     "reflect-metadata": "0.1.12",
     "rxjs": "6.0.0",
     "typeorm": "0.2.7",
-    "typescript": "2.6.2"
+    "typescript": "2.6.2",
+    "uuid": "3.3.2"
   },
   "devDependencies": {
     "@nestjs/testing": "5.0.0",
