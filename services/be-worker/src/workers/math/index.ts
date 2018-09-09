@@ -13,10 +13,11 @@ export default class MathWorker extends BaseWorker {
 
     const { results, state } = content;
     const { method, numbers } = state.shift();
-    
+  
+    let result;
     try {
       console.log('Request to mathservice!');
-      const result = await req(`http://${host}:${port}/${method}/${numbers}`);
+      result = await req(`http://${host}:${port}/${method}/${numbers}`);
       results.push(JSON.parse(result));
       console.log('Response received from mathservice!');
     } catch (e) {
@@ -31,6 +32,6 @@ export default class MathWorker extends BaseWorker {
       this.end(content);
     }
 
-    resolve();
+    resolve(result);
   }
 }
