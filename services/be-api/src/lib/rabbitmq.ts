@@ -1,8 +1,9 @@
 /**
- * SHARED RabbitMQ Service v0.8.0
+ * SHARED RabbitMQ Service v0.9.0
  */
 
 import * as amqpConnManager from 'amqp-connection-manager';
+import * as uuid from 'uuid/v4';
 
 export class RabbitMQService {
   /**
@@ -34,6 +35,12 @@ export class RabbitMQService {
       }
     },
 
+    publish: {
+      default: {
+        persistent: true
+      }
+    },
+
     queue: {
       default: {
         durable: true,
@@ -43,7 +50,7 @@ export class RabbitMQService {
 
     queuer: {
       default: {
-        persist: true,
+        persistent: true,
         priority: 1,
       }
     },
@@ -82,7 +89,7 @@ export class RabbitMQService {
   /**
    * Create new confirm channel.
    */
-  private getChannel(setup) {
+  private getChannel(setup = undefined) {
     return this.conn.createChannel({ 
       json: true,
       setup,
@@ -218,6 +225,11 @@ export class RabbitMQService {
    * Binding name mostly the name of queue.
    */
   public publish(exchange, binding, payload, options = {}) {
+    const mOptions = {
+      ...this.defaults.publish.default,
+      ...options,
+    };
+
     const channel = this.getChannel(ch =>
       this.assertStandardExchange(ch, exchange)
     );
@@ -226,7 +238,10 @@ export class RabbitMQService {
       exchange,
       binding,
       payload,
-      options,
+      mOptions,
+      (err, ok) => {
+        channel.close();
+      }
     );
   }
 
@@ -240,17 +255,21 @@ export class RabbitMQService {
       queue,
       payload,
       {
+        persistent: true,
         headers: {
           'x-delay': delay
         }
       },
+      (err, ok) => {
+        channel.close();
+      }
     );
   }
 
   /**
    *  Send to Queue.
    */
-  public sendToQueue(queue, payload, options = {}) {
+  public sendToQueue(queue, payload, options = {}, confirm) {
     const channel = this.getChannel(ch =>
       this.assertStandardQueue(ch, queue)
     );
@@ -260,14 +279,10 @@ export class RabbitMQService {
       ...options
     };
 
-    return channel.sendToQueue(queue, payload, mOptions)
-      .then(
-        () => channel.close(),
-        err => (
-          channel.close(),
-          Promise.reject(err)
-        )
-      );
+    return channel.sendToQueue(queue, payload, mOptions, (err, ok) => {
+      confirm && confirm(err, ok);
+      channel.close();
+    });
   }
 
   /**
@@ -341,14 +356,12 @@ export class RabbitMQServiceWLogger extends RabbitMQService {
   }
 
   sendToQueue(queue, payload, options = {}) {
-    return super.sendToQueue(queue, payload, options)
-      .then(data => {
-        console.log(`A message sent to ${queue} queue.`);
-        return data;
-      }, err => {
-        console.log(`A message rejected from ${queue} queue.`);
-        return Promise.reject(err);
-      });
+    return super.sendToQueue(queue, payload, options, (err, ok) => {
+      console.log("-----------------------------");
+      err && console.log(`A message rejected from ${queue} queue.`);
+      ok && console.log(`A message sent to ${queue} queue.`);
+      console.log("-----------------------------");
+    })
   }
 
   consume(queue, consumer, options = {}) {
@@ -359,6 +372,7 @@ export class RabbitMQServiceWLogger extends RabbitMQService {
   consumerMiddleware(ch, consumer) {
     return super.consumerMiddleware(
       ch, (content, resolve, reject) => {
+        console.log("-----------------------------");
         console.log(`#${content.id} received: `, content);
         consumer(content, () => {
           console.log(`#${content.id} done.`);
@@ -367,13 +381,15 @@ export class RabbitMQServiceWLogger extends RabbitMQService {
           console.log(`#${content.id} rejected${requeue ? ' will requeue' : ''}.`);
           reject(requeue);
         });
+        console.log("-----------------------------");
       }
     );
   }
 
   publishDefaultDelayed(queue, delay, payload) {
+    console.log("-----------------------------");
     console.log(`Delayed. to=${queue} for=${delay} #${payload.id}:`, payload);
-
+    console.log("-----------------------------");
     return super.publishDefaultDelayed(queue, delay, payload);
   }
 };
