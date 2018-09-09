@@ -21,6 +21,7 @@
     "dotenv": "6.0.0",
     "redis": "2.8.0",
     "request": "2.88.0",
-    "request-promise-native": "1.0.5"
+    "request-promise-native": "1.0.5",
+    "uuid": "3.3.2"
   }
 }
