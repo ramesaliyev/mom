@@ -6,6 +6,7 @@
   "author": "Rames Aliyev",
   "license": "MIT",
   "scripts": {
+    "prestart": "cpx '../../libraries/**/*' 'src/lib/'",
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "NODE_PATH=dist/ node dist/main.js",
     "start": "ts-node -r tsconfig-paths/register src/main.ts"
@@ -19,6 +20,7 @@
     "amqplib": "0.5.2",
     "class-transformer": "0.1.9",
     "class-validator": "0.9.1",
+    "cpx": "^1.5.0",
     "credential": "2.0.0",
     "dotenv": "6.0.0",
     "fastify-formbody": "2.0.0",

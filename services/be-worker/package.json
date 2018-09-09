@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prestart": "cpx '../../libraries/**/*' 'src/lib/'",
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "NODE_PATH=dist/ node dist/main.js",
     "start": "ts-node -r tsconfig-paths/register src/main.ts"
@@ -18,6 +19,7 @@
   "dependencies": {
     "amqp-connection-manager": "2.1.0",
     "amqplib": "0.5.2",
+    "cpx": "^1.5.0",
     "dotenv": "6.0.0",
     "redis": "2.8.0",
     "request": "2.88.0",

@@ -2,6 +2,7 @@
   "name": "math-service",
   "version": "0.1.0",
   "scripts": {
+    "prestart": "cpx '../../libraries/**/*' 'src/lib/'",
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "NODE_PATH=dist/ node dist/main.js",
     "start": "ts-node -r tsconfig-paths/register src/main.ts"
@@ -14,6 +15,7 @@
     "typescript": "3.0.1"
   },
   "dependencies": {
+    "cpx": "1.5.0",
     "dotenv": "6.0.0",
     "express": "4.16.3",
     "facty": "0.1.1"
