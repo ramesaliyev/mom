@@ -22,6 +22,9 @@ import { isJobCreationInProgress } from 'selectors/job';
 
 import styles from './index.styles';
 
+const getRandomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min
+
 class CreateMathJob extends Component {
   constructor(props) {
     super(props);
@@ -46,8 +49,8 @@ class CreateMathJob extends Component {
 
   createOperation() {
     return {
-      method: 'factors',
-      numbers: ''
+      method: 'add',
+      numbers: `${getRandomInt(100, 999)},${getRandomInt(100, 999)},${getRandomInt(100, 999)}`,
     };
   }
 
@@ -158,18 +161,17 @@ const MathOperation = ({ classes, details, onMethodChange, onNumbersChange }) =>
             onChange={e => onMethodChange(e.target.value)}
             input={<Input name="method" id="method" />}
           >
-            <MenuItem value={'factors'}>Factors</MenuItem>
             <MenuItem value={'add'}>Add</MenuItem>
             <MenuItem value={'subtract'}>Subtract</MenuItem>
             <MenuItem value={'multiply'}>Multiply</MenuItem>
             <MenuItem value={'divide'}>Divide</MenuItem>
+            <MenuItem value={'factors'}>Factors</MenuItem>
           </Select>
         </FormControl>
       </Grid>
       <Grid item xs={9}>
         <TextField
           required
-          id="cardNumber"
           label="Comma Separated Numbers"
           fullWidth
           onChange={e => onNumbersChange(e.target.value)}
