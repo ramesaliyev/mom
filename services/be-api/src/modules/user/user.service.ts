@@ -2,6 +2,8 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { MQService } from 'core/services/mq.service';
+
 import { User } from './user.entity';
 import { UserRegisterDTO } from './user.dto';
 
@@ -10,6 +12,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly mqService: MQService,
   ) {}
 
   async findOneBy(by: any): Promise<User> {
@@ -29,16 +32,16 @@ export class UserService {
   }
 
   async create(userRegisterDTO: UserRegisterDTO): Promise<UserRegisterDTO> {
-    const user = this.userRepository.create(userRegisterDTO);
-    
-    const isExist = await this.findOneByEmail(user.email);
+    const creation: any = await this.mqService.rpc('job', {
+      type: 'db',
+      action: 'user.create',
+      payload: userRegisterDTO,
+    });
 
-    if (isExist) {
-      throw new ConflictException('Email already used.');
+    if (creation.error) {
+      throw new ConflictException(creation.message);
     }
 
-    await this.userRepository.save(user);
-
-    return user.safeResponse();
+    return creation;
   }
 }

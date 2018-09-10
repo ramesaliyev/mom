@@ -20,6 +20,6 @@ import { JobModule } from 'modules/job/job.module';
     AuthModule,
     JobModule,
   ],
-  controllers: [CoreController],
+  controllers: [CoreController]
 })
 export class CoreApplicatonModule {}
