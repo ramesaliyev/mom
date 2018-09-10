@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import './lib/configure-env';
 
 import { RabbitMQServiceWLogger } from './lib/rabbitmq';
@@ -16,6 +17,7 @@ service.consume(QUEUE_NAME, (content, resolve, reject) => {
   try {
     worker.consume(content, resolve, reject);
   } catch (e) {
+    console.log(`${type} worker errored.`, e);
     reject();
   }
 });
