@@ -1,3 +1,5 @@
+![Architecture Diagram](./assets/architecture-diagram.png)
+
 # About
 This is a demonstration of how to create simple yet capable architecture with [MOM](https://www.wikiwand.com/en/Message-oriented_middleware) (Message-Oriented-Middleware) approach to achieve well scalable and distributed systems. This demonstration contains two things; first of it is general purpose site routines; like registering an user etc. Other part is the automated job processing demonstration. 
 
