@@ -1,73 +1,164 @@
 # MOM Based Architecture POC
-This is a demonstration of how to create simple yet capable architecture with [MOM](https://www.wikiwand.com/en/Message-oriented_middleware) (Message-Oriented-Middleware) approach to achieve well scalable and distributed systems. This demonstration contains two things; first of it is general purpose site routines; like registering an user etc. Other part is the automated job processing demonstration. 
+This is a demonstration of how to create simple yet capable architecture with [MOM](https://www.wikiwand.com/en/Message-oriented_middleware) (Message-Oriented-Middleware) approach to achieve well scalable and distributed systems. On the tip of the [iceberg](https://www.wikiwand.com/en/Iceberg) we're only seeing an admin panel, where you can register, login, order and list jobs etc. But under the hood (or below the sea level?) whole app running by queuing messages to do things.
 
-On the tip of the [iceberg](https://www.wikiwand.com/en/Iceberg) we're only seeing an admin panel, where you can register, login, forgot your password, create campaigns etc. But under the hood (or below the sea level?) whole app running by queuing messages to do things.
+Here is a diagram to visualise how our architecture works.
 
 <p align="center"><img src="./assets/architecture-diagram.png" alt="Architecture Diagram" /></p>
 
-# Technologies
-- Backend
-  - [Docker](https://www.docker.com/)
-  - [JWT](https://jwt.io/)
-  - [NodeJS](https://nodejs.org/)
-    - Libraries
-      - [AMQP.Node](https://github.com/squaremo/amqp.node)
-      - [Nest Framework](https://nestjs.com/)
-      - [TypeORM](http://typeorm.io/)
-  - [PostgreSQL](https://www.postgresql.org/)
-  - [RabbitMQ](https://www.rabbitmq.com/)
-    - Plugins
-      - [Delayed Message Exchange](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange)
-      - [Management](https://github.com/rabbitmq/rabbitmq-management)
-  - [Redis](https://redis.io/)
-  - [Socket.io](https://socket.io/)
-  - [TypeScript](https://www.typescriptlang.org/)
-- Frontend
-  - Libraries
-    - [Axios](https://github.com/axios/axios)
-    - [Material-UI](https://material-ui.com/)
-    - [React](https://reactjs.org/)
-    - [React-Router](https://github.com/ReactTraining/react-router)
-    - [Redux](https://redux.js.org/)
-    - [Redux-Saga](https://github.com/redux-saga/redux-saga)
+# Table of Contents
+- [Core Concept](#core-concept)
+- [Concepts of Architecture](#concepts-of-architecture)
+  - [Authenticating](#authenticating)
+  - [Socket Connection](#socket-connection)
+- [Pieces of Architecture](#pieces-of-architecture)
+  - [API](#api)
+  - [Containerization](#containerization)
+  - [Database](#database)
+  - [External Services](#external-services)
+  - [Memory Database](#memory-database)
+  - [Message Queue](#message-queue)
+  - [Panel](#panel)
+  - [Socket Server](#socket-server)
+  - [Worker](#worker)
+- [Additional Pieces](#additional-pieces)
+  - [Libraries](#libraries)
+  - [Sandbox](#sandbox)
+  - [Scripts](#scripts)
+- **[Installation and Running](#installation-and-running)**
+  - [Cloning Repo](#cloning-repo)
+  - [Start Everything](#start-everything)
+  - [Start Only Data Services](#start-only-data-services)
+  - [Stopping a Service](#stopping-a-service)
+  - [Starting a Service with Rebuild](#starting-a-service-with-rebuild)
+  - [Starting a Service outside of Docker](#starting-a-service-outside-of-docker)
+- [Technologies Used](#technologies-used)
+- [Management Screens](#management-screens)
+- [Connection Points](#connection-points)
+- [Using Sandbox](#using-sandbox)
+- [Debugging](#debugging)
+- [Resources for Better Understanding](#resources-for-better-understanding)
 
-# Installation & Running
+# Core Concept
+The core concept is; when there is a work which need to be done; services wont communicate to related service directly. Instead of that they will leave a message to message queue, which will be consumed by service (worker) that responsible of that work.
+
+For example, in traditional systems when an user want to register, he or she calls the api and api will create a new db record and return some response to user. But here, API doesn't create db record itself, instead of that; it leaves a message to message queue which have details about what should be done (and data like email, password etc.) and waits for some db-worker to take care of it.
+
+This *waiting* technique actually named [RPC](https://www.rabbitmq.com/tutorials/tutorial-six-javascript.html) and it means that message leaver will wait until job is done, and will do something with returned data (like informing user directly by returning a response). We're using RPC only in jobs like user register and login, because this kind of jobs needs to inform user directly and instantly. RPC messages will have top priority (10) which cause them to be processed by worker before ordinary (lower priority) messages. 
+
+On the other hand, there are jobs which are not in a hurry and needs to be done **sometime**. Like math tasks. There is a screen in panel where you can schedule math tasks. Like sum or multiply these numbers etc. And there is a math-worker inside worker service which will call another external math service to get results of this calculations. And to inform user after these kind of deferred works, we're using socket connections.
+
+But what if user not in panel and there is no socket connection? Well, after a deferred task, beside trying to inform user over socket, of course we're also persisting result of that job into database. (By leaving a message to message queue for db-worker.) So even user not in panel, he/she will see information on next login.
+
+# Concepts of Architecture
+## Authenticating
+## Socket Connection
+
+# Pieces of Architecture
+## API
+
+## Containerization
+
+## Database
+
+## External Services
+Fake APIs for us to fetch data from. Think these as some external services like twiter etc. Right now our only external service is exmathservice which does basic calculations for us.
+
+## Memory Database
+
+## Message Queue
+
+## Panel
+Admin panel of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [react-router](https://github.com/ReactTraining/react-router), [redux](https://redux.js.org/), [redux-saga](https://github.com/redux-saga/redux-saga) and [material-ui](https://material-ui.com/).
+
+## Socket Server
+
+## Worker
+
+# Additional Pieces
+## Libraries
+
+## Sandbox
+Seperated from our main application; the purpose of sandbox is making experiments for grasp better understanding over concepts, libraries etc. For more information and to learn how to use sandbox see [using sandbox](#using-sandbox) section.
+
+## Scripts
+Some bash scripts to use when needed.
+
+# Installation and Running
 To install and run application you only need to have installed and running [docker](https://www.docker.com/products).
 
-#### Cloning Repo
-    git clone git@github.com:ramesaliyev/mom-based-architecture-poc.git
+## Cloning Repo
+    git clone git@github.com:ramesaliyev/mom.git
 
-#### Start Everything
+## Start Everything
     docker-compose up --build
-
-#### Start Only Data Services
-    docker-compose up postgresql_server postgresql_adminer rabbitmq_server redis_server redis_commander
 
 **Starting everything will take some time**, so be patient. When everything has started you can;
   - Navigate to admin panel at [localhost:9090](http://localhost:9090/)
   - See other [management screens](#management-screens)
 
-# Structure
-## Backend
-Our main MOM based architecture what is this POC about.
+## Start Only Data Services
+    docker-compose up postgresql_server postgresql_adminer rabbitmq_server redis_server redis_commander
 
-## Frontend
-All front-end side of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [react-router](https://github.com/ReactTraining/react-router), [redux](https://redux.js.org/), [redux-saga](https://github.com/redux-saga/redux-saga) and [material-ui](https://material-ui.com/). 
+## Stopping a Service
 
-### Panel
-Right now we have only one front-end app which is our admin panel. 
+    docker-compose stop <servicename>
 
-## Sandbox
-Seperated from our main application; the purpose of sandbox is making experiments for grasp better understanding over concepts, libraries etc. For more information and to learn how to use sandbox see [using sandbox](#using-sandbox) section.
+    # example
+    docker-compose stop api
 
-## External
-A fake api for us to fetch data from. To imitate a real world scenarios external api may randomly;
-- take long time to respond
-- respond with errors
-- occurs timeouts
+## Starting a Service with Rebuild
 
-## Scripts
-Some bash scripts to use when needed.
+    docker-compose up --build <servicename>
+
+    # example
+    docker-compose up --build api
+
+## Starting a Service outside of Docker
+You can start every service outside of docker.
+
+1- Navigate to service folder.
+  
+    cd services/be-api
+
+2- Install dependencies.
+
+    npm i
+
+3- Start in development mode.
+
+    npm start
+
+4- Or Production mode.
+
+    npm run start:prod
+
+Notices:
+  1. In docker every service starts in production mode by default.
+  2. There is no watch mode in development. So you need to restart a service if you change something.
+  3. You need to rebuild docker image if you want to start a service in docker after you change something.
+
+# Technologies Used
+- Backend
+  - [Docker](https://www.docker.com/)
+  - [JWT](https://jwt.io/)
+  - [NodeJS](https://nodejs.org/)
+    - [AMQP.Node](https://github.com/squaremo/amqp.node)
+    - [Nest Framework](https://nestjs.com/)
+    - [TypeORM](http://typeorm.io/)
+  - [PostgreSQL](https://www.postgresql.org/)
+  - [RabbitMQ](https://www.rabbitmq.com/)
+    - [Delayed Message Exchange](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange)
+    - [Management](https://github.com/rabbitmq/rabbitmq-management)
+  - [Redis](https://redis.io/)
+  - [Socket.io](https://socket.io/)
+  - [TypeScript](https://www.typescriptlang.org/)
+- Frontend
+  - [Axios](https://github.com/axios/axios)
+  - [Material-UI](https://material-ui.com/)
+  - [React](https://reactjs.org/)
+  - [React-Router](https://github.com/ReactTraining/react-router)
+  - [Redux](https://redux.js.org/)
+  - [Redux-Saga](https://github.com/redux-saga/redux-saga)
 
 # Management Screens
 - Our Panel: [localhost:9090](http://localhost:9090/)
@@ -98,6 +189,43 @@ Some bash scripts to use when needed.
 - Redis
   - **hostname:** localhost:7073
 
+# Using Sandbox
+There is a sandbox to ease making experiments with things. It consist of mostly little scripts written in plain javascript by following tutorials etc. You can add something under the sandbox and run it within container. Since folder already added as volume you dont need to restart anything. To enter in sandbox;
+
+    docker exec -it poc_sandbox /bin/sh
+
+And when you in, simply run scripts as you want;
+    
+    node rabbitmq/tutorial/hello-world/send.js
+
+Create a new terminal window and run the receiver also;
+
+    node rabbitmq/tutorial/hello-world/receive.js
+
+You can run multiple receivers to observe things.
+
+# Debugging
+These debug instructions are for VSCode only.
+
+## Frontend
+1. Install latest version of [VS Code](https://code.visualstudio.com/) and [VS Code Chrome Debugger Extension](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome).
+
+2. Start your app (outside of the docker) by running `npm start`. 
+
+3. Now start debugging in VS Code by choosing correct configuration (ex: `Fe/Panel`).
+
+4. You can now write code, set breakpoints, make changes to the code, and debug your newly modified code, all from your editor. 
+
+## Services
+
+1. Navigate to `.ts` file you would want to debug.
+
+2. Now start debugging in VS Code by choosing correct configuration (ex: `Be/Api`).
+
+3. You can now write code, set breakpoints, make changes to the code, and debug your newly modified code, all from your editor.
+
+For example: you want to debug api, navigate to `src/modules/auth/auth.controller.ts` and add breakpoint to `login` method. Then in postman or from frontend, trigger the api.
+
 # Resources for Better Understanding 
   - Docker
     - [Building Efficient Dockerfiles - Node.js](http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/)
@@ -122,35 +250,3 @@ Some bash scripts to use when needed.
   - TypeScript
     - [In 5 Minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
     - [Handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html)
-
-# Using Sandbox
-There is a sandbox to ease making experiments with things. It consist of mostly little scripts written in plain javascript by following tutorials etc. You can add something under the sandbox and run it within container. Since folder already added as volume you dont need to restart anything. To enter in sandbox;
-
-    docker exec -it poc_sandbox /bin/sh
-
-And when you in, simply run scripts as you want;
-    
-    node rabbitmq/tutorial/hello-world/send.js
-
-Create a new terminal window and run the receiver also;
-
-    node rabbitmq/tutorial/hello-world/receive.js
-
-You can run multiple receivers to observe things.
-
-# Debugging
-## Frontend
-For front-end debugging start containers without panel. You can also start management containers if you want.
-    
-    docker-compose up api postgresql_server rabbitmq redis_server
-    
-Then start panel locally.
-
-    npm i
-    npm start
-  
-Now you can use your favorite editor to debugging. [See here](/frontend/panel/README.md) for editor integrations.
-
-# TODO
-- Some visualisation about journey of messages would be nice.
-- Use RabbitMQ with rabbitmq-delayed-message-exchange [plugin](https://hub.docker.com/r/tetsuobe/rabbitmq-delayed-message-exchange/~/dockerfile/).
