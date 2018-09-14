@@ -54,8 +54,8 @@ services:
     container_name: poc_redis_commander
     image: rediscommander/redis-commander:latest
     restart: always
-    environment:
-      - REDIS_HOSTS=local:redis_server:6379
+    env_file:
+      - ./config/env/.docker.env
     ports:
       - 9093:8081
     networks:
