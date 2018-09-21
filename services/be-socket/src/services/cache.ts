@@ -1,13 +1,8 @@
-import * as redis from 'redis';
-const { promisify } = require('util');
+import { Redis } from 'lib/redis'; 
+import { CacheConfig } from 'config/cache';
 
-const client = redis.createClient({
-  host: process.env.REDIS_HOSTNAME,
-  port: +process.env.REDIS_PORT
-});
+const redis = new Redis(CacheConfig);
 
-export const get = promisify(client.get).bind(client);
-
-export const getUserFromCache = id => get(
+export const getUserFromCache = id => redis.get(
   `${process.env.USER_TOKEN_CACHE_PREFIX}${id}`
 );

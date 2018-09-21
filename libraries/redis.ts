@@ -1,11 +1,11 @@
 /**
- * SHARED Redis Service v0.1.0
+ * SHARED Redis Library v0.2.0
  */
 
 import { promisify } from "util";
 import * as redis from "redis";
 
-export class RedisService {
+export class Redis {
   private client;
   public get;
 

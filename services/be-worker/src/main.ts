@@ -1,14 +1,14 @@
 import "reflect-metadata";
 import './lib/configure-env';
 
-import { RabbitMQServiceWLogger } from './lib/rabbitmq';
+import { RabbitMQWLogger as RabbitMQ } from './lib/rabbitmq';
 import { MQConfig } from 'config/mq';
 
 const QUEUE_NAME = 'job';
 
 import workers from './workers';
 
-const service = new RabbitMQServiceWLogger(MQConfig);
+const service = new RabbitMQ(MQConfig);
 
 service.consume(QUEUE_NAME, (content, resolve, reject) => {
   const { type } = content;

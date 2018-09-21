@@ -1,11 +1,11 @@
 /**
- * SHARED RabbitMQ Service v0.10.3
+ * SHARED RabbitMQ Library v0.11.0
  */
 
 import * as amqpConnManager from 'amqp-connection-manager';
 import * as uuid from 'uuid/v4';
 
-export class RabbitMQService {
+export class RabbitMQ {
   /**
    * 
    */
@@ -46,6 +46,7 @@ export class RabbitMQService {
         durable: true,
         maxPriority: 10,
       },
+
       rpc: {
         durable: true,
         exclusive: true,
@@ -59,7 +60,7 @@ export class RabbitMQService {
         priority: 1,
       }
     },
-  }
+  };
 
   /**
    * 
@@ -250,7 +251,7 @@ export class RabbitMQService {
     );
   }
 
-  public publishDefaultDelayed(queue, delay, payload) {
+  public publishDefaultDelayed(queue, delay, payload, options = {}) {
     const channel = this.getChannel(ch => {
       this.assertDelayedExchange(ch, this.defaultDelayedExchange);
     });
@@ -263,7 +264,8 @@ export class RabbitMQService {
         persistent: true,
         headers: {
           'x-delay': delay
-        }
+        },
+        ...options,
       },
       (err, ok) => {
         channel.close();
@@ -413,7 +415,7 @@ export class RabbitMQService {
   }
 }
 
-export class RabbitMQServiceWLogger extends RabbitMQService {
+export class RabbitMQWLogger extends RabbitMQ {
   connect(config) {
     const returned = super.connect(config);
 
@@ -444,12 +446,12 @@ export class RabbitMQServiceWLogger extends RabbitMQService {
     return super.consumerMiddleware(
       ch, (content, resolve, reject) => {
         console.log("-----------------------------");
-        console.log(`#${content.id} received: `, content);
+        console.log(`#${content.uuid} received: `, content);
         consumer(content, result => {
-          console.log(`#${content.id} done.`);
+          console.log(`#${content.uuid} done.`);
           resolve(result);
         }, requeue => {
-          console.log(`#${content.id} rejected${requeue ? ' will requeue' : ''}.`);
+          console.log(`#${content.uuid} rejected${requeue ? ' will requeue' : ''}.`);
           reject(requeue);
         });
         console.log("-----------------------------");
@@ -457,10 +459,10 @@ export class RabbitMQServiceWLogger extends RabbitMQService {
     );
   }
 
-  publishDefaultDelayed(queue, delay, payload) {
+  publishDefaultDelayed(queue, delay, payload, options) {
     console.log("-----------------------------");
-    console.log(`Delayed. to=${queue} for=${delay} #${payload.id}:`, payload);
+    console.log(`Delayed. to=${queue} for=${delay} #${payload.uuid}:`, payload);
     console.log("-----------------------------");
-    return super.publishDefaultDelayed(queue, delay, payload);
+    return super.publishDefaultDelayed(queue, delay, payload, options);
   }
 };

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { RabbitMQServiceWLogger } from 'lib/rabbitmq'; 
+import { RabbitMQWLogger as RabbitMQ } from 'lib/rabbitmq'; 
 import { MQConfig } from 'config/mq';
 
 @Injectable()
-export class MQService extends RabbitMQServiceWLogger {
+export class MQService extends RabbitMQ {
   constructor() {
     super(MQConfig);
   }

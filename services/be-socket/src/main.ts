@@ -1,10 +1,10 @@
 import "./lib/configure-env";
 
 import { SocketServer } from './server';
-import { RabbitMQServiceWLogger } from './lib/rabbitmq';
+import { RabbitMQWLogger as RabbitMQ } from './lib/rabbitmq';
 import { MQConfig } from 'config/mq';
 
-const service = new RabbitMQServiceWLogger(MQConfig);
+const service = new RabbitMQ(MQConfig);
 
 const socketServer = SocketServer.getSocket('/user');
 
