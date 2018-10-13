@@ -89,6 +89,8 @@ services:
     env_file:
       - ./config/env/.common.env
       - ./config/env/.docker.env
+    volumes:
+      - ./libraries:/usr/src/api/src/lib
     ports:
       - 7070:7070
     networks:
@@ -106,6 +108,8 @@ services:
     env_file:
       - ./config/env/.common.env
       - ./config/env/.docker.env
+    volumes:
+      - ./libraries:/usr/src/socket/src/lib
     ports:
       - 7080:7080
     networks:
@@ -123,6 +127,8 @@ services:
     env_file:
       - ./config/env/.common.env
       - ./config/env/.docker.env
+    volumes:
+      - ./libraries:/usr/src/worker/src/lib
     networks:
       - poc_network
     depends_on:
@@ -138,6 +144,8 @@ services:
     env_file:
       - ./config/env/.common.env
       - ./config/env/.docker.env
+    volumes:
+      - ./libraries:/usr/src/panel/src/lib
     ports:
       - 9090:9090
     networks:
@@ -151,6 +159,8 @@ services:
     env_file:
       - ./config/env/.common.env
       - ./config/env/.docker.env
+    volumes:
+      - ./libraries:/usr/src/ex-math-service/src/lib
     ports:
       - 7090:7090
     networks:
