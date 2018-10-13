@@ -26,7 +26,7 @@ export default class MathWorker extends BaseWorker {
 
     if (state.length) {
       this.next(content);
-      // this.nextDelayed(3000, content);
+      // this.nextDelayed(3, content);
     } else {
       delete content.state;
       this.end(content);

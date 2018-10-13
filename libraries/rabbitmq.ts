@@ -1,9 +1,16 @@
 /**
- * SHARED RabbitMQ Library v0.11.0
+ * SHARED RabbitMQ Service v0.11.0
  */
 
 import * as amqpConnManager from 'amqp-connection-manager';
 import * as uuid from 'uuid/v4';
+
+export interface IRabbitMQConfig {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+};
 
 export class RabbitMQ {
   /**
@@ -46,7 +53,6 @@ export class RabbitMQ {
         durable: true,
         maxPriority: 10,
       },
-
       rpc: {
         durable: true,
         exclusive: true,
@@ -60,12 +66,12 @@ export class RabbitMQ {
         priority: 1,
       }
     },
-  };
+  }
 
   /**
    * 
    */
-  constructor(private readonly config) {
+  constructor(private readonly config: IRabbitMQConfig) {
     this.queues = {};
     this.exchanges = {};
 
@@ -246,7 +252,7 @@ export class RabbitMQ {
       payload,
       mOptions,
       (err, ok) => {
-        console.log(err);
+        err && console.log(err);
         channel.close();
       }
     );
@@ -264,12 +270,12 @@ export class RabbitMQ {
       {
         persistent: true,
         headers: {
-          'x-delay': delay
+          'x-delay': delay * 1000 // to miliseconds
         },
         ...options,
       },
       (err, ok) => {
-        console.log(err);
+        err && console.log(err);
         channel.close();
       }
     );
@@ -289,7 +295,7 @@ export class RabbitMQ {
     };
 
     return channel.sendToQueue(queue, payload, mOptions, (err, ok) => {
-      console.log(err);
+      err && console.log(err);
       confirm && confirm(err, ok);
       channel.close();
     });
@@ -392,7 +398,8 @@ export class RabbitMQ {
               replyTo,
               result,
               { correlationId },
-              () => {
+              (err, ok) => {
+                err && console.log(err);
                 replyCh.close();
               }
             );
