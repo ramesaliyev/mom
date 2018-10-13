@@ -246,6 +246,7 @@ export class RabbitMQ {
       payload,
       mOptions,
       (err, ok) => {
+        console.log(err);
         channel.close();
       }
     );
@@ -268,6 +269,7 @@ export class RabbitMQ {
         ...options,
       },
       (err, ok) => {
+        console.log(err);
         channel.close();
       }
     );
@@ -287,6 +289,7 @@ export class RabbitMQ {
     };
 
     return channel.sendToQueue(queue, payload, mOptions, (err, ok) => {
+      console.log(err);
       confirm && confirm(err, ok);
       channel.close();
     });
