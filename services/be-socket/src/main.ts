@@ -8,21 +8,25 @@ const service = new RabbitMQ(MQConfig);
 
 const socketServer = SocketServer.getSocket('/user');
 
-service.consume('socket', (content, resolve) => {
-  const ownerId = content.owner.id;
-  console.log(`Job received, emitting to user #${ownerId}`);
-
-  socketServer.emitToUser(ownerId, 'job:done', content);
+const startConsuming = () => {
+  service.consume('socket', (content, resolve) => {
+    const ownerId = content.owner.id;
+    console.log(`Job received, emitting to user #${ownerId}`);
   
-  resolve();
-}).then(() => {
-  console.log('Consuming socket queue...');
-});
-
-let bCount = 0;
-const test = () => {
-  socketServer.emitToUser(1, 'notification', `🔥 #${++bCount}`);
-  setTimeout(test, Math.random() * 20000);
+    socketServer.emitToUser(ownerId, 'job:done', content);
+    
+    resolve();
+  }).then(() => {
+    console.log('Consuming socket queue...');
+  });
+  
+  let bCount = 0;
+  const test = () => {
+    socketServer.emitToUser(1, 'notification', `🔥 #${++bCount}`);
+    setTimeout(test, Math.random() * 20000);
+  }
 }
 
-test();
+// Start consuming after 10 seconds. 
+// For make sure everybody reconnected before sending messages.
+setTimeout(startConsuming, 10000);
