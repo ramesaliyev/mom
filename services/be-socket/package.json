@@ -1,7 +1,10 @@
 {
-  "name": "api",
+  "name": "socket",
   "version": "0.1.0",
   "private": true,
+  "description": "socket of mom based architecture poc",
+  "author": "Rames Aliyev",
+  "license": "MIT",
   "scripts": {
     "prestart": "cpx '../../libraries/**/*' 'src/lib/'",
     "prestart:prod": "rm -rf dist && tsc",
@@ -22,7 +25,7 @@
     "@types/socket.io": "1.4.38",
     "amqp-connection-manager": "2.1.0",
     "amqplib": "0.5.2",
-    "cpx": "^1.5.0",
+    "cpx": "1.5.0",
     "dotenv": "6.0.0",
     "express": "4.16.3",
     "jsonwebtoken": "8.3.0",

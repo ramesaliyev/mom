@@ -5,7 +5,7 @@ WORKDIR /usr/src/worker
 
 # Take advantage of cached Docker layers.
 COPY package*.json ./
-RUN npm install
+RUN npm install --production
 
 # Bundle app source
 COPY . .

@@ -1,6 +1,10 @@
 {
-  "name": "math-service",
+  "name": "external-math-service",
   "version": "0.1.0",
+  "private": true,
+  "description": "external-math-service of mom based architecture poc",
+  "author": "Rames Aliyev",
+  "license": "MIT",
   "scripts": {
     "prestart": "cpx '../../libraries/**/*' 'src/lib/'",
     "prestart:prod": "rm -rf dist && tsc",
