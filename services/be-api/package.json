@@ -12,6 +12,11 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts"
   },
   "dependencies": {
+    "@nestjs/testing": "5.0.0",
+    "@types/express": "4.0.39",
+    "@types/jest": "21.1.8",
+    "@types/node": "9.3.0",
+    "@types/supertest": "2.0.4",
     "@nestjs/common": "5.3.6",
     "@nestjs/core": "5.3.6",
     "@nestjs/jwt": "0.1.1",
@@ -35,11 +40,6 @@
     "uuid": "3.3.2"
   },
   "devDependencies": {
-    "@nestjs/testing": "5.0.0",
-    "@types/express": "4.0.39",
-    "@types/jest": "21.1.8",
-    "@types/node": "9.3.0",
-    "@types/supertest": "2.0.4",
     "jest": "21.2.1",
     "ts-loader": "4.1.0",
     "ts-node": "4.1.0",

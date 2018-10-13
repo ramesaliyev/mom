@@ -12,14 +12,14 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts"
   },
   "devDependencies": {
-    "@types/express": "4.0.39",
-    "@types/node": "9.3.0",
     "ts-loader": "4.1.0",
     "ts-node": "4.1.0",
     "tsconfig-paths": "3.1.1",
     "typescript": "3.0.1"
   },
   "dependencies": {
+    "@types/express": "4.0.39",
+    "@types/node": "9.3.0",
     "@types/jsonwebtoken": "7.2.8",
     "@types/redis": "2.8.6",
     "@types/socket.io": "1.4.38",

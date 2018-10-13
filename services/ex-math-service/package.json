@@ -12,13 +12,13 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts"
   },
   "devDependencies": {
-    "@types/node": "9.3.0",
     "ts-loader": "4.1.0",
     "ts-node": "4.1.0",
     "tsconfig-paths": "3.1.1",
     "typescript": "3.0.1"
   },
   "dependencies": {
+    "@types/node": "9.3.0",
     "cpx": "1.5.0",
     "dotenv": "6.0.0",
     "express": "4.16.3",
