@@ -14,14 +14,14 @@
   "devDependencies": {
     "ts-loader": "4.1.0",
     "ts-node": "4.1.0",
-    "tsconfig-paths": "3.1.1",
-    "typescript": "3.0.1"
+    "tsconfig-paths": "3.1.1"
   },
   "dependencies": {
     "@types/node": "9.3.0",
     "cpx": "1.5.0",
     "dotenv": "6.0.0",
     "express": "4.16.3",
-    "facty": "0.1.1"
+    "facty": "0.1.1",
+    "typescript": "3.0.1"
   }
 }
