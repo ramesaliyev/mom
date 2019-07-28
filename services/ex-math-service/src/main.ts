@@ -30,27 +30,31 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Internal Server Error!')
 });
 
-app.get('/factors/:nums', ({ params: { nums } }, res) => {
+function randomTimeout(fn) {
+  setTimeout(fn, parseInt(String(Math.random() * 10000), 10));
+}
+
+app.get('/factors/:nums', ({ params: { nums } }, res) => randomTimeout(() => {
   nums = nums.split(',');
   res.send(nums.map(num => facty.factorize(+num)));
-});
+}));
 
-app.get('/add/:nums', ({ params: { nums } }, res) => {
+app.get('/add/:nums', ({ params: { nums } }, res) => randomTimeout(() => {
   res.send(reduceParam(nums, (a, b) => a + b));
-});
+}));
 
-app.get('/subtract/:nums', ({ params: { nums } }, res) => {
+app.get('/subtract/:nums', ({ params: { nums } }, res) => randomTimeout(() => {
   res.send(reduceParam(nums, (a, b) => a - b));
-});
+}));
 
-app.get('/multiply/:nums', ({ params: { nums } }, res) => {
+app.get('/multiply/:nums', ({ params: { nums } }, res) => randomTimeout(() => {
   res.send(reduceParam(nums, (a, b) => a * b, 1));
-});
+}));
 
-app.get('/divide/:nums', ({ params: { nums } }, res) => {
+app.get('/divide/:nums', ({ params: { nums } }, res) => randomTimeout(() => {
   const [first, ...rest] = nums.split(',');
   res.send(reduceParam(rest.join(','), (a, b) => a / b, first));
-});
+}));
 
 app.listen(+process.env.EXMATHSERVICE_PORT, () =>
   console.log(`MathService listening on port ${process.env.EXMATHSERVICE_PORT}!`)
