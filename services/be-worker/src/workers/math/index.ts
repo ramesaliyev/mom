@@ -13,7 +13,7 @@ export default class MathWorker extends BaseWorker {
 
     const { results, state } = content;
     const { method, numbers } = state.shift();
-  
+
     let result;
     try {
       console.log('Request to mathservice!');
