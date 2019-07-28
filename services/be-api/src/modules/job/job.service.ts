@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -22,22 +22,30 @@ export class JobService {
   async findAll(query: any): Promise<Job[]> {
     return await this.jobRepository.find(query);
   }
+
   async create(userFromToken: UserSafeDTO, jobCreateDTO: JobCreateDTO): Promise<Job> {
     const user = await this.userService.findOneById(userFromToken.id);
 
-    const { type, details } = jobCreateDTO;
+    const job = {
+      ...jobCreateDTO,
+      owner: user,
+      done: false
+    }
 
-    const JobRecord = new Job();
-    JobRecord.owner = user;
-    JobRecord.done = false;
-    JobRecord.type = type;
-    JobRecord.details = details;
+    const creation: any = await this.mqService.rpc('job', {
+      type: 'db',
+      action: 'job.upsert',
+      payload: job,
+    });
 
-    const record = await this.jobRepository.save(JobRecord);
-    record.owner = user.safeResponse();
+    if (creation.error) {
+      throw new ConflictException(creation.message);
+    }
 
-    await this.mqService.sendToQueue(`job`, JobRecord);
-    
-    return record;
+    creation.owner = user.safeResponse();
+
+    await this.mqService.sendToQueue(`job`, creation);
+
+    return creation;
   }
 }
