@@ -29,6 +29,19 @@ export default class MathWorker extends BaseWorker {
       // this.nextDelayed(3, content);
     } else {
       delete content.state;
+
+      content.details.forEach((detail, index) => {
+        detail.result = content.results[index];
+      });
+
+      content.done = true;
+
+      await this.queue('job', {
+        type: 'db',
+        action: 'job.upsert',
+        payload: content,
+      });
+
       this.end(content);
     }
 
