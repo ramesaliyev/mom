@@ -36,7 +36,7 @@ const AppBarComponent = ({ classes, onMenuClick, isDrawerOpen, showMenuButton })
           MOM Based Architecture POC | Panel
         </Typography>
         <div className={classes.codeButtonWrapper}>
-          <a href="https://github.com/ramesaliyev/mom" target="_blank" className={classes.link}>
+          <a rel="noopener noreferrer" href="https://github.com/ramesaliyev/mom" target="_blank" className={classes.link}>
             <IconButton
               color="inherit"
               className={ToolbarIconClasses}
