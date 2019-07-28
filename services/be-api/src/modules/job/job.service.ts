@@ -19,6 +19,9 @@ export class JobService {
     private readonly mqService: MQService,
   ) {}
 
+  async findAll(query: any): Promise<Job[]> {
+    return await this.jobRepository.find(query);
+  }
   async create(userFromToken: UserSafeDTO, jobCreateDTO: JobCreateDTO): Promise<Job> {
     const user = await this.userService.findOneById(userFromToken.id);
 
