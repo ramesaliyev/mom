@@ -6,7 +6,9 @@ import {
   LOAD_OWN_JOBS,
   LOAD_OWN_JOBS_SUCCESS,
   LOAD_OWN_JOBS_FAILURE,
+  UPDATE_JOB,
 } from 'symbols/job';
+
 export default (
   state = {},
   action,
@@ -46,6 +48,13 @@ export default (
         loading: false,
       };
 
+    case UPDATE_JOB:
+      const indexOfJob = state.data.findIndex(job => job.id === action.data.id);
+
+      state.data = [...state.data];
+      state.data[indexOfJob] = action.data;
+
+      return {...state};
 
     default:
       return state;

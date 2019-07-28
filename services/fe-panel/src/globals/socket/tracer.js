@@ -1,4 +1,5 @@
 import { notifier } from 'globals/notify';
+import { jobUpdated } from 'triggers/job';
 
 const notify = notifier('Socket', 'wifi');
 
@@ -29,4 +30,7 @@ export default (socket) => {
   socket.on('auth-error', (reason = 'no-reason') => nError(`AuthError (${reason}).`));
   socket.on('notification', (notification) => nSuccess(`Notification: "${notification}".`));
   socket.on('job:done', (job) => nGrey(`Job Done: "${job.type}#${job.id}".`));
+
+  // Trigger store.
+  socket.on('job:done', job => jobUpdated(job));
 }
