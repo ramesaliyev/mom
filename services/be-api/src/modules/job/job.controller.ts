@@ -1,4 +1,4 @@
-import { Post, Controller, UsePipes, ValidationPipe, Body, UseGuards } from '@nestjs/common';
+import { Post, Get, Controller, UsePipes, ValidationPipe, Body, UseGuards } from '@nestjs/common';
 
 import { AuthGuard } from 'guards/auth.guard';
 import { User } from 'decorators/user.decorator';
@@ -12,7 +12,13 @@ export class JobController {
   constructor(
     private readonly jobService: JobService,
   ) {}
-  
+
+  @Get('my')
+  @UseGuards(AuthGuard)
+  async findAll(@User() user): Promise<Job[]> {
+    return await this.jobService.findAll({owner: user});
+  }
+
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(
