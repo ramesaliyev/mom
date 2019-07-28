@@ -7,21 +7,7 @@ Here is a diagram to visualise how our architecture works.
 
 # Table of Contents
 - [Core Concept](#core-concept)
-- [Concepts of Architecture](#concepts-of-architecture)
-  - [Authenticating](#authenticating)
-  - [Socket Connection](#socket-connection)
-- [Pieces of Architecture](#pieces-of-architecture)
-  - [API](#api)
-  - [Containerization](#containerization)
-  - [Database](#database)
-  - [External Services](#external-services)
-  - [Memory Database](#memory-database)
-  - [Message Queue](#message-queue)
-  - [Panel](#panel)
-  - [Socket Server](#socket-server)
-  - [Worker](#worker)
 - [Additional Pieces](#additional-pieces)
-  - [Libraries](#libraries)
   - [Sandbox](#sandbox)
   - [Scripts](#scripts)
 - **[Installation and Running](#installation-and-running)**
@@ -43,40 +29,13 @@ The core concept is; when there is a work which need to be done; services wont c
 
 For example, in traditional systems when an user want to register, he or she calls the api and api will create a new db record and return some response to user. But here, API doesn't create db record itself, instead of that; it leaves a message to message queue which have details about what should be done (and data like email, password etc.) and waits for some db-worker to take care of it.
 
-This *waiting* technique actually named [RPC](https://www.rabbitmq.com/tutorials/tutorial-six-javascript.html) and it means that message leaver will wait until job is done, and will do something with returned data (like informing user directly by returning a response). We're using RPC only in jobs like user register and login, because this kind of jobs needs to inform user directly and instantly. RPC messages will have top priority (10) which cause them to be processed by worker before ordinary (lower priority) messages. 
+This *waiting* technique actually named [RPC](https://www.rabbitmq.com/tutorials/tutorial-six-javascript.html) and it means that message leaver will wait until job is done, and will do something with returned data (like informing user directly by returning a response). We're using RPC only in jobs like user register or job creation for make an example. RPC messages will have top priority (10) which cause them to be processed by worker before ordinary (lower priority) messages.
 
-On the other hand, there are jobs which are not in a hurry and needs to be done **sometime**. Like math tasks. There is a screen in panel where you can schedule math tasks. Like sum or multiply these numbers etc. And there is a math-worker inside worker service which will call another external math service to get results of this calculations. And to inform user after these kind of deferred works, we're using socket connections.
+On the other hand, there are jobs which are not in a hurry and needs to be done **sometime**. Like math tasks. There is a screen in panel where you can schedule math tasks. Like sum or multiply these numbers etc. And there is a math-worker inside worker service which will call another external math service to get results of this calculations. And to inform user after these kind of deferred works, we're using socket connections. (Our math service will respond between 0~10 second delay for demonstration purposes.)
 
-But what if user not in panel and there is no socket connection? Well, after a deferred task, beside trying to inform user over socket, of course we're also persisting result of that job into database. (By leaving a message to message queue for db-worker.) So even user not in panel, he/she will see information on next login.
-
-# Concepts of Architecture
-## Authenticating
-## Socket Connection
-
-# Pieces of Architecture
-## API
-
-## Containerization
-
-## Database
-
-## External Services
-Fake APIs for us to fetch data from. Think these as some external services like twiter etc. Right now our only external service is exmathservice which does basic calculations for us.
-
-## Memory Database
-
-## Message Queue
-
-## Panel
-Admin panel of our applicaton. Since this POC is not about front-end architectures I've simply used [create-react-app](https://github.com/facebook/create-react-app) to bootstrap [react](https://reactjs.org/) apps, cleaned up unnecessary things, and created a simply architecture on top of it with [axios](https://github.com/axios/axios), [react-router](https://github.com/ReactTraining/react-router), [redux](https://redux.js.org/), [redux-saga](https://github.com/redux-saga/redux-saga) and [material-ui](https://material-ui.com/).
-
-## Socket Server
-
-## Worker
+But what if user not in panel and there is no socket connection? Well, after a deferred task, beside trying to inform user over socket, of course we should also persist result of that job into database. (By leaving a message to message queue for db-worker.) So even user not in panel, he/she will see information on next login. (I didnt implement this, but this is the idea.)
 
 # Additional Pieces
-## Libraries
-
 ## Sandbox
 Seperated from our main application; the purpose of sandbox is making experiments for grasp better understanding over concepts, libraries etc. For more information and to learn how to use sandbox see [using sandbox](#using-sandbox) section.
 
@@ -117,7 +76,7 @@ To install and run application you only need to have installed and running [dock
 You can start every service outside of docker.
 
 1- Navigate to service folder.
-  
+
     cd services/be-api
 
 2- Install dependencies.
@@ -195,7 +154,7 @@ There is a sandbox to ease making experiments with things. It consist of mostly 
     docker exec -it poc_sandbox /bin/sh
 
 And when you in, simply run scripts as you want;
-    
+
     node rabbitmq/tutorial/hello-world/send.js
 
 Create a new terminal window and run the receiver also;
@@ -210,11 +169,11 @@ These debug instructions are for VSCode only.
 ## Frontend
 1. Install latest version of [VS Code](https://code.visualstudio.com/) and [VS Code Chrome Debugger Extension](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome).
 
-2. Start your app (outside of the docker) by running `npm start`. 
+2. Start your app (outside of the docker) by running `npm start`.
 
 3. Now start debugging in VS Code by choosing correct configuration (ex: `Fe/Panel`).
 
-4. You can now write code, set breakpoints, make changes to the code, and debug your newly modified code, all from your editor. 
+4. You can now write code, set breakpoints, make changes to the code, and debug your newly modified code, all from your editor.
 
 ## Services
 
@@ -226,7 +185,7 @@ These debug instructions are for VSCode only.
 
 For example: you want to debug api, navigate to `src/modules/auth/auth.controller.ts` and add breakpoint to `login` method. Then in postman or from frontend, trigger the api.
 
-# Resources for Better Understanding 
+# Resources for Better Understanding
   - Docker
     - [Building Efficient Dockerfiles - Node.js](http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/)
   - MOM
